@@ -94,17 +94,12 @@ const CategoriesPage: React.FC = () => {
                     className={`group relative overflow-hidden rounded-2xl p-8 sm:p-10 text-left transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl animate-fadeInUp stagger-${Math.min(i + 1, 8)}`}
                   >
                     <div className={`absolute inset-0 bg-gradient-to-br ${cat.gradient} opacity-90`} />
-                    <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-black/40 to-black/5" />
                     <div className="relative">
                       <div className="text-5xl mb-4">{cat.icon}</div>
                       <h3 className="font-display text-2xl font-bold text-white mb-2">{cat.name}</h3>
                       <p className="text-sm text-white/70 font-sans mb-4 leading-relaxed">{cat.description}</p>
-                      <div className="flex items-center justify-between pt-4 border-t border-white/20">
-                        <span className="text-sm text-white/60 font-sans">{catWorks.length} tác phẩm</span>
-                        <span className="text-sm text-white font-sans font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
-                          Xem →
-                        </span>
-                      </div>
+
                       <div className="mt-4 space-y-1">
                         {catWorks.slice(0, 3).map(w => (
                           <div key={w.id || w._id} className="text-xs text-white/40 font-sans truncate">
@@ -112,14 +107,22 @@ const CategoriesPage: React.FC = () => {
                           </div>
                         ))}
                       </div>
+
+                      <div className="flex items-center justify-between mt-6 pt-4 border-t border-white/20">
+                        <span className="text-sm text-white/60 font-sans">{catWorks.length} tác phẩm</span>
+                        <span className="text-sm text-white font-sans font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                          Xem →
+                        </span>
+                      </div>
                     </div>
                   </button>
                 );
               })}
             </div>
-          )}
-        </section>
-      </div>
+          )
+          }
+        </section >
+      </div >
     );
   }
 

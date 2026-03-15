@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AdminUser, LiteraryWork, BorrowRecord, LibraryMember, NewsItem, ActivityLog } from '../types';
-import { categories, getCategoryName } from '../constants/categories';
+
 import {
   getBooks,
   addBook,
@@ -362,7 +362,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user }) => {
   const [notifOpen, setNotifOpen] = useState(false);
 
   const [books, setBooks] = useState<LiteraryWork[]>([]);
-  const [categoryOptions, setCategoryOptions] = useState<any[]>(categories);
+  const [categoryOptions, setCategoryOptions] = useState<any[]>([]);
   const [showBookModal, setShowBookModal] = useState(false);
   const [editingBook, setEditingBook] = useState<LiteraryWork | null>(null);
   const [bookPage, setBookPage] = useState(1);
@@ -458,7 +458,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user }) => {
           getBooks(),
           getAccounts(),
           getAllBorrowsLMS(),
-          getCategories().catch(() => categories)
+          getCategories().catch(() => [])
         ]);
         if (!mounted) return;
         const normalizedBooks = (booksData || []).map(normalizeBook);
@@ -984,7 +984,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user }) => {
     books.forEach(b => { catMap[b.category as any] = (catMap[b.category as any] || 0) + 1; });
     const colors = ['#A52422', '#2D6A4F', '#3A7CA5', '#C5973E', '#6B4226', '#40916C', '#5A9EC4', '#D4A856'];
     return Object.entries(catMap).slice(0, 5).map(([cat, count], i) => ({
-      label: getCategoryName(cat as any),
+      label: categoryOptions.find(c => c.id === cat || c._id === cat)?.name || cat,
       value: count,
       color: colors[i % colors.length],
     }));
@@ -1460,9 +1460,14 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user }) => {
                           </td>
                           <td className="px-4 py-3.5 text-gray-600 text-[13px] font-medium">{book.authorName}</td>
                           <td className="px-4 py-3.5">
-                            <span className="px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-[11px] font-semibold border border-blue-100">
-                              {getCategoryName(typeof book.category === 'string' ? book.category : (book.category as any)?.id || 'all')}
-                            </span>
+                            {(() => {
+                              const bookCat = typeof book.category === 'object' ? book.category?.name : book.categoryName || book.category;
+                              return (
+                                <span className="px-2 py-1 text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300 rounded-full">
+                                  {bookCat}
+                                </span>
+                              );
+                            })()}
                           </td>
                           <td className="px-4 py-3.5 text-center text-gray-500 text-[13px]">{book.year}</td>
                           <td className="px-4 py-3.5 text-center">
@@ -2103,7 +2108,7 @@ const AdminDashboard: React.FC<AdminDashboardProps> = ({ user }) => {
                 <h3 className="font-bold text-gray-900 text-[16px] leading-snug" style={{ fontFamily: 'Playfair Display, serif' }}>{viewingBook.title}</h3>
                 <p className="text-gray-500 text-[13px] mt-0.5">{viewingBook.authorName} · {viewingBook.year}</p>
                 <span className="inline-block mt-1.5 px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 text-[11px] font-semibold border border-blue-100">
-                  {getCategoryName(typeof viewingBook.category === 'string' ? viewingBook.category : (viewingBook.category as any)?.id || 'all')}
+                  {typeof viewingBook.category === 'object' ? viewingBook.category?.name : viewingBook.categoryName || viewingBook.category}
                 </span>
               </div>
             </div>

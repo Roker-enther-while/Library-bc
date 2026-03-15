@@ -15,9 +15,12 @@ import ProfilePage from './pages/ProfilePage';
 import AuthPage from './pages/AuthPage';
 import AdminLoginPage from './pages/AdminLoginPage';
 import AdminDashboard from './pages/AdminDashboard';
+import AIChatbot from './components/AIChatbot';
 import { Routes, Route, useLocation } from 'react-router-dom';
+
 const App: React.FC = () => {
   const location = useLocation();
+
   // Initialize dark mode from localStorage
   useEffect(() => {
     const isDark = localStorage.getItem('darkMode') === 'true';
@@ -25,7 +28,9 @@ const App: React.FC = () => {
       document.documentElement.classList.add('dark');
     }
   }, []);
-  const isAdminPage = location.pathname.startsWith('/admin') || location.pathname === '/dang-nhap';
+
+  const isAdminPage = location.pathname.startsWith('/admin') || location.pathname === '/admin/dangnhap';
+
   return (
     <ToastProvider>
       <div className="min-h-screen flex flex-col bg-parchment dark:bg-dark-bg transition-colors duration-300">
@@ -63,8 +68,12 @@ const App: React.FC = () => {
         {!isAdminPage && (
           <BottomNavigation />
         )}
+
+        {/* AI Chatbot Assistant */}
+        {!isAdminPage && <AIChatbot />}
       </div>
     </ToastProvider>
   );
 };
+
 export default App;

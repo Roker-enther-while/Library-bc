@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Search, X, BookOpen, SlidersHorizontal } from 'lucide-react';
 import { LiteraryWork, CategoryInfo } from '../types';
 import { getBooks, searchBooks, getCategories } from '../services/api';
-import { getCategoryName } from '../constants/categories';
+
 import BookCard from '../components/BookCard';
 import ReservationModal from '../components/ReservationModal';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -223,7 +223,7 @@ const LibraryPage: React.FC = () => {
             <div className="mb-4">
               <p className="text-sm text-ink-light/50 font-sans">
                 {filtered.length > 0
-                  ? `Hiển thị ${filtered.length} tác phẩm${search ? ` cho "${search}"` : ''}${selectedCategory !== 'all' ? ` trong ${getCategoryName(selectedCategory)}` : ''}`
+                  ? `Hiển thị ${filtered.length} tác phẩm${search ? ` cho "${search}"` : ''}${selectedCategory !== 'all' ? ` trong ${categories_dynamic.find(c => c.id === selectedCategory)?.name || selectedCategory}` : ''}`
                   : 'Không tìm thấy tác phẩm nào'}
               </p>
             </div>

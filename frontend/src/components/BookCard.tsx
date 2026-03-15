@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, Eye, BookOpen, ChevronRight, Heart, MapPin } from 'lucide-react';
 import { LiteraryWork } from '../types';
-import { getCategoryName } from '../constants/categories';
+
 
 interface BookCardProps {
   work: LiteraryWork;
@@ -45,8 +45,7 @@ const BookCard: React.FC<BookCardProps> = ({ work, onRead, onReserve, variant = 
     if (n >= 1000) return `${(n / 1000).toFixed(1)}k`;
     return n.toString();
   };
-
-  const categoryId = typeof work.category === 'string' ? work.category : work.category?.id;
+  const categoryName = work.categoryName || (typeof work.category === 'object' ? (work.category as any).name : work.category) || 'Không rõ';
 
   if (variant === 'featured') {
     return (
@@ -73,7 +72,7 @@ const BookCard: React.FC<BookCardProps> = ({ work, onRead, onReserve, variant = 
           <div className="flex-1 p-5 sm:p-6 flex flex-col">
             <div className="flex items-start justify-between mb-1">
               <span className="text-[10px] font-sans font-semibold uppercase tracking-wider text-vermillion">
-                {getCategoryName(categoryId)}
+                {categoryName}
               </span>
               <button
                 onClick={toggleFavorite}
@@ -213,7 +212,7 @@ const BookCard: React.FC<BookCardProps> = ({ work, onRead, onReserve, variant = 
         </button>
         <div className="p-4">
           <span className="text-[10px] font-sans font-semibold uppercase tracking-wider text-vermillion">
-            {getCategoryName(categoryId)}
+            {categoryName}
           </span>
           <h3
             className="font-display text-base font-bold text-ink dark:text-parchment mt-1 line-clamp-1 group-hover:text-vermillion transition-colors cursor-pointer"

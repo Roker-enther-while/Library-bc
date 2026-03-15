@@ -46,13 +46,27 @@ const authLimiter = rateLimit({
 });
 app.use('/api/auth/login', authLimiter);
 
+// Rate Limiting for AI Chat
+const aiChatLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 30, // 30 messages per minute
+    message: { message: 'Bạn đang chat quá nhanh. Vui lòng đợi một lát rồi thử lại.' }
+});
+app.set('aiChatLimiter', aiChatLimiter);
+
+
 // Routes
 app.use('/api/books', require('./routes/bookRoutes'));
+app.use('/api/authors', require('./routes/authorRoutes'));
+app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/auth', require('./routes/authRoutes'));
+
 app.use('/api/upload', require('./routes/uploadRoutes'));
 app.use('/api/borrow', require('./routes/borrowRoutes'));
 app.use('/api/reservations', require('./routes/reservationRoutes'));
 app.use('/api/news', require('./routes/newsRoutes'));
+app.use('/api/ai', require('./routes/aiRoutes'));
+
 
 app.get('/', (req, res) => {
     res.json({ status: 'ok', message: 'Library API is running 📚' });

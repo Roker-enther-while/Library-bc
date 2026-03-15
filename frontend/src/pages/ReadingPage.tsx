@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DOMPurify from 'dompurify';
 import { ArrowLeft, Clock, Eye, BookOpen, ChevronUp, Bookmark, Calendar, User } from 'lucide-react';
 import { LiteraryWork } from '../types';
-import { getCategoryName } from '../constants/categories';
+
 import { getChapter, getBooks, saveReadingProgress, getReadingProgress } from '../services/api';
 import BookCard from '../components/BookCard';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -162,7 +162,7 @@ const ReadingPage: React.FC = () => {
             </div>
             <div>
               <span className="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm text-white text-xs font-sans font-medium rounded-full mb-4">
-                {getCategoryName(typeof work?.category === 'string' ? work.category : work?.category?.id)}
+                {work.categoryName || (typeof work?.category === 'object' ? (work.category as any).name : work.category) || 'Không rõ'}
               </span>
               <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
                 {work?.title}

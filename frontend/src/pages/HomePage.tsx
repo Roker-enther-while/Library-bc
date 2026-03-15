@@ -165,7 +165,7 @@ const HomePage: React.FC = () => {
                   className={`group relative overflow-hidden rounded-2xl p-6 sm:p-8 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-xl animate-fadeInUp stagger-${Math.min(i + 1, 8)}`}
                 >
                   <div className={`absolute inset-0 bg-gradient-to-br ${cat.gradient} opacity-90`} />
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-black/40 to-black/5" />
                   <div className="relative">
                     <div className="text-3xl sm:text-4xl mb-3">{cat.icon}</div>
                     <h3 className="font-display text-lg sm:text-xl font-bold text-white mb-1">{cat.name}</h3>

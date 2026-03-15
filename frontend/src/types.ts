@@ -26,6 +26,7 @@ export interface LiteraryWork {
   authorId?: string;
   authorName?: string;
   category: CategoryInfo | { id: string; name?: string; description?: string; icon?: string; gradient?: string } | string;
+  categoryName?: string;
   publicationYear?: number;
   year?: number | string;
   isbn?: string;

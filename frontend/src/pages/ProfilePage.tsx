@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { LiteraryWork, Author } from '../types';
 import { getBooks, getAuthors } from '../services/api';
-import { categories } from '../constants/categories';
+
 import { User, BookOpen, Heart, Clock, Award, TrendingUp, Calendar, Settings } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -77,7 +77,9 @@ export default function ProfilePage() {
       const topCategory = Object.entries(categoryCount).sort((a, b) => b[1] - a[1])[0];
       const topAuthor = Object.entries(authorCount).sort((a, b) => b[1] - a[1])[0];
 
-      const categoryInfo = categories.find(c => c.id === topCategory?.[0]);
+      const catWork = favoriteWorks.find(w => (typeof w.category === 'string' ? w.category : w.category?.id) === topCategory?.[0]);
+      const favoriteCategoryName = catWork?.categoryName || (typeof catWork?.category === 'object' ? (catWork.category as any).name : catWork?.category) || 'Chưa có';
+
       const authorInfo = authors_dynamic.find(a => a.id === topAuthor?.[0]);
 
       let level = 'Người mới';
@@ -88,7 +90,7 @@ export default function ProfilePage() {
       setStats({
         totalRead: history.length,
         totalTime,
-        favoriteCategory: categoryInfo?.name || 'Chưa có',
+        favoriteCategory: favoriteCategoryName,
         favoriteAuthor: authorInfo?.name || 'Chưa có',
         streak: Math.floor(Math.random() * 7) + 1,
         level
@@ -97,11 +99,8 @@ export default function ProfilePage() {
   }, [works_dynamic, authors_dynamic]);
 
   const isPoetryCategory = (work: LiteraryWork) => {
-    const catId = typeof work.category === 'string' ? work.category : work.category?.id;
-    const catName = (typeof work.category === 'string'
-      ? categories.find(c => c.id === catId)?.name
-      : work.category?.name) || '';
-    return catName.toLowerCase().includes('thơ');
+    const catName = work.categoryName || (typeof work.category === 'object' ? (work.category as any).name : work.category) || '';
+    return catName.toLowerCase().includes('thơ') || catName.toLowerCase() === 'poetry';
   };
 
   const achievements = [
