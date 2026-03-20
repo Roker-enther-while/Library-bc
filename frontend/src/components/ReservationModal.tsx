@@ -1,6 +1,8 @@
+'use client';
+
 import React, { useState } from 'react';
 import { X, BookOpen, MapPin, CheckCircle, Clock, AlertCircle, ChevronRight } from 'lucide-react';
-import { createReservation } from '../services/api';
+import { createReservation } from '@/lib/apiClient';
 
 interface ReservationModalProps {
     book: {

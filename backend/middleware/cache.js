@@ -1,8 +1,12 @@
 const NodeCache = require('node-cache');
 
-// Tạo instance cache, thời gian sống mặc định (TTL) là 3600 giây (1 giờ)
-// Tính năng này giả lập kiến trúc Caching của Redis (In-Memory Data Store)
-const cache = new NodeCache({ stdTTL: 3600 });
+// Tạo instance cache với giới hạn để an toàn cho server 1GB RAM
+// stdTTL: 600s (10 phút), checkperiod: 120s (2 phút), maxKeys: 500 (tối đa 500 bản ghi)
+const cache = new NodeCache({
+    stdTTL: 600,
+    checkperiod: 120,
+    maxKeys: 500
+});
 
 /**
  * Middleware để kiểm tra xem request đã có trong cache chưa

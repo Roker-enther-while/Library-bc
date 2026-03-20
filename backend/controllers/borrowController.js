@@ -54,7 +54,7 @@ exports.createBorrow = async (req, res) => {
 // Return Book
 exports.returnBook = async (req, res) => {
     try {
-        const { recordId } = req.body;
+        const { recordId } = req.params;
         const record = await BorrowRecord.findById(recordId);
         if (!record || record.status === 'returned') {
             return res.status(400).json({ message: 'Phiếu mượn không hợp lệ hoặc đã trả!' });

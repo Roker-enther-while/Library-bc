@@ -14,10 +14,13 @@ const {
 router.post('/', protect, createReservation);
 router.get('/my', protect, getMyReservations);
 router.patch('/:id/cancel', protect, cancelReservation);
+router.post('/:id/cancel', protect, cancelReservation);
 
 // Admin/Librarian routes
 router.get('/', protect, adminOnly, getAllReservations);
 router.patch('/:id/confirm', protect, adminOnly, confirmReservation);
+router.post('/:id/confirm', protect, adminOnly, confirmReservation);
 router.patch('/:id/pickup', protect, adminOnly, markPickedUp);
+router.post('/:id/pick-up', protect, adminOnly, markPickedUp);
 
 module.exports = router;

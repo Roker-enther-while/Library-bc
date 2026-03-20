@@ -1,6 +1,7 @@
 const Book = require('../models/Book');
 const User = require('../models/User');
 const Copy = require('../models/Copy');
+const ReadingProgress = require('../models/ReadingProgress');
 
 // Transform MongoDB doc to frontend-compatible object
 const transformBook = (book) => {
@@ -29,7 +30,14 @@ const getBooks = async (req, res) => {
 // Get book by ID
 const getBookById = async (req, res) => {
     try {
-        const book = await Book.findById(req.params.id);
+        const { id } = req.params;
+        let book = await Book.findById(id);
+
+        if (!book) {
+            // Trường hợp dự phòng nếu search bằng slug nhưng _id không khớp
+            book = await Book.findOne({ _id: id });
+        }
+
         if (book) {
             // Increment views automatically
             book.views = (book.views || 0) + 1;
@@ -38,6 +46,97 @@ const getBookById = async (req, res) => {
         } else {
             res.status(404).json({ message: 'Book not found' });
         }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get specific chapter
+const getChapter = async (req, res) => {
+    try {
+        const { id, chapterNumber } = req.params;
+        const num = parseInt(chapterNumber);
+
+        const book = await Book.findById(id);
+        if (!book) return res.status(404).json({ message: 'Book not found' });
+
+        // Hiện tại dữ liệu chưa chi tiết chương, trả về fullText cho chương 1
+        if (num === 1) {
+            res.json({
+                bookId: book._id,
+                chapterNumber: 1,
+                title: 'Toàn văn',
+                content: book.fullText || book.excerpt || 'Nội dung đang được cập nhật...'
+            });
+        } else {
+            res.status(404).json({ message: 'Chapter not found' });
+        }
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Save reading progress
+const saveReadingProgress = async (req, res) => {
+    try {
+        const { id } = req.params; // bookId (slug or _id)
+        const { chapter, scrollY } = req.body;
+        const userId = req.user?._id;
+        if (!userId) {
+            return res.status(401).json({ message: 'Không tìm thấy thông tin người dùng!' });
+        }
+
+        console.log(`[BACKEND] Saving progress for book: ${id}, user: ${userId}, scrollY: ${scrollY}`);
+
+        try {
+            const progress = await ReadingProgress.findOneAndUpdate(
+                { userId: userId, bookId: id },
+                {
+                    chapter: chapter || 1,
+                    chapterNumber: chapter || 1, // Sync with both names
+                    scrollY: scrollY || 0,
+                    lastRead: Date.now()
+                },
+                { upsert: true, new: true, runValidators: true }
+            );
+
+            res.json(progress);
+        } catch (dbError) {
+            // Handle race condition for upsert
+            if (dbError.code === 11000) {
+                const retryProgress = await ReadingProgress.findOneAndUpdate(
+                    { userId: userId, bookId: id },
+                    {
+                        chapter: chapter || 1,
+                        chapterNumber: chapter || 1,
+                        scrollY: scrollY || 0,
+                        lastRead: Date.now()
+                    },
+                    { new: true }
+                );
+                return res.json(retryProgress);
+            }
+            throw dbError; // re-throw to outer catch
+        }
+    } catch (error) {
+        console.error('[DATABASE ERROR] saveReadingProgress failed:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// Get reading progress
+const getReadingProgress = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const userId = req.user?._id;
+
+        if (!userId) {
+            return res.json({ chapter: 1, scrollY: 0 });
+        }
+
+        console.log(`[BACKEND] Getting progress for book: ${id}, user: ${userId}`);
+        const progress = await ReadingProgress.findOne({ userId: userId, bookId: id });
+        res.json(progress || { chapter: 1, scrollY: 0 });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -60,7 +159,7 @@ const addBook = async (req, res) => {
 
         // Automatically create copies for tracking
         const copies = [];
-        for (let i = 0; i < (totalCopies || 1); i++) {
+        for (let i = 0; i < (quantity || 1); i++) {
             copies.push({
                 book: created._id,
                 barcode: `B${created._id.toString().slice(-4)}${Date.now().toString().slice(-4)}${i}`,
@@ -158,4 +257,4 @@ const getAdminStats = async (req, res) => {
     }
 };
 
-module.exports = { getBooks, getBookById, addBook, updateBook, deleteBook, searchBooks, getAdminStats };
+module.exports = { getBooks, getBookById, getChapter, saveReadingProgress, getReadingProgress, addBook, updateBook, deleteBook, searchBooks, getAdminStats };

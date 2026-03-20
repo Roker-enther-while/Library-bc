@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Book = require('../models/Book');
 
 const generateToken = (id, role) => {
-    const expiresIn = (role === 'admin' || role === 'librarian') ? '4h' : '7d';
+    const expiresIn = (role === 'admin' || role === 'librarian') ? '4h' : '1d';
     return jwt.sign({ id, role }, process.env.JWT_SECRET, { expiresIn });
 };
 
@@ -14,9 +15,9 @@ const transformUser = (user) => ({
     phone: user.phone,
     role: user.role,
     status: user.status,
-    studentId: user.studentId,
     cardStatus: user.cardStatus,
     penalties: user.penalties || 0,
+    favorites: user.favorites || [],
     createdAt: user.createdAt ? new Date(user.createdAt).toLocaleDateString('vi-VN') : '',
 });
 
@@ -125,10 +126,78 @@ exports.toggleStatus = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
         if (!user) return res.status(404).json({ message: 'Không tìm thấy tài khoản!' });
-        user.status = user.status === 'active' ? 'inactive' : 'active';
+
+        // Toggle both overall status and card status for consistency
+        const isActive = user.status === 'active';
+        user.status = isActive ? 'inactive' : 'active';
+        user.cardStatus = isActive ? 'locked' : 'active';
+
+        console.log(`[BACKEND] Toggling status for user ${user.username}: ${isActive} -> ${!isActive}`);
         await user.save();
-        res.json(transformUser(user));
+
+        const transformed = transformUser(user);
+        res.json(transformed);
+    } catch (error) {
+        console.error('[BACKEND-ERROR] Toggle status failed:', error);
+        res.status(500).json({
+            message: 'Lỗi máy chủ khi cập nhật trạng thái!',
+            error: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+        });
+    }
+};
+
+// PATCH /api/auth/favorites/:bookId (authenticated)
+exports.toggleFavorite = async (req, res) => {
+    try {
+        const { bookId } = req.params;
+        const user = await User.findById(req.user._id);
+        if (!user) return res.status(404).json({ message: 'Người dùng không tồn tại!' });
+
+        if (!user.favorites) user.favorites = [];
+
+        const index = user.favorites.indexOf(bookId);
+        if (index > -1) {
+            user.favorites.splice(index, 1);
+        } else {
+            user.favorites.push(bookId);
+        }
+
+        await user.save();
+        res.json({ favorites: user.favorites });
     } catch (error) {
         res.status(500).json({ message: error.message });
+    }
+};
+
+// GET /api/auth/favorites (authenticated)
+exports.getFavorites = async (req, res) => {
+    try {
+        const user = req.user;
+        if (!user) return res.status(401).json({ message: 'Không có quyền truy cập!' });
+
+        const favoriteIds = user.favorites || [];
+        console.log(`[Favorites] Checking favorites for ${user.username}:`, favoriteIds);
+
+        if (favoriteIds.length === 0) return res.json([]);
+
+        if (!Book) {
+            throw new Error('Book model is not loaded correctly!');
+        }
+
+        const books = await Book.find({
+            $or: [
+                { _id: { $in: favoriteIds } },
+                { id: { $in: favoriteIds } }
+            ]
+        });
+
+        res.json(books);
+    } catch (error) {
+        console.error('getFavorites error:', error);
+        res.status(500).json({
+            message: error.message,
+            stack: error.stack
+        });
     }
 };
