@@ -3,8 +3,9 @@ import connectDB from '@/lib/db';
 import User from '@/models/User';
 import { verifyToken, adminOnly } from '@/lib/auth';
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const requester = await verifyToken(req);
         if (!adminOnly(requester)) {
             return NextResponse.json({ message: 'Bạn không có quyền thực hiện hành động này!' }, { status: 403 });
@@ -12,7 +13,7 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
 
         await connectDB();
         const { password, ...rest } = await req.json();
-        const user = await User.findById(params.id);
+        const user = await User.findById(id);
         if (!user) {
             return NextResponse.json({ message: 'Không tìm thấy tài khoản!' }, { status: 404 });
         }
@@ -39,15 +40,16 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const requester = await verifyToken(req);
         if (!adminOnly(requester)) {
             return NextResponse.json({ message: 'Bạn không có quyền thực hiện hành động này!' }, { status: 403 });
         }
 
         await connectDB();
-        const user = await User.findByIdAndDelete(params.id);
+        const user = await User.findByIdAndDelete(id);
         if (!user) {
             return NextResponse.json({ message: 'Không tìm thấy tài khoản!' }, { status: 404 });
         }
@@ -58,16 +60,16 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
     }
 }
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
-    // This is for toggleStatus
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const requester = await verifyToken(req);
         if (!adminOnly(requester)) {
             return NextResponse.json({ message: 'Bạn không có quyền thực hiện hành động này!' }, { status: 403 });
         }
 
         await connectDB();
-        const user = await User.findById(params.id);
+        const user = await User.findById(id);
         if (!user) {
             return NextResponse.json({ message: 'Không tìm thấy tài khoản!' }, { status: 404 });
         }

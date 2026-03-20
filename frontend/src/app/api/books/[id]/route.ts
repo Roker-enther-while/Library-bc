@@ -3,10 +3,11 @@ import connectDB from '@/lib/db';
 import Book from '@/models/Book';
 import { transformBook } from '@/lib/bookUtils';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         await connectDB();
-        const book = await Book.findById(params.id);
+        const book = await Book.findById(id);
         if (!book) {
             return NextResponse.json({ message: 'Không tìm thấy sách!' }, { status: 404 });
         }
@@ -21,11 +22,12 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         await connectDB();
         const data = await req.json();
-        const book = await Book.findByIdAndUpdate(params.id, data, { new: true });
+        const book = await Book.findByIdAndUpdate(id, data, { new: true });
 
         if (!book) {
             return NextResponse.json({ message: 'Không tìm thấy sách!' }, { status: 404 });
@@ -37,10 +39,11 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
     }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         await connectDB();
-        const book = await Book.findByIdAndDelete(params.id);
+        const book = await Book.findByIdAndDelete(id);
         if (!book) {
             return NextResponse.json({ message: 'Không tìm thấy sách!' }, { status: 404 });
         }

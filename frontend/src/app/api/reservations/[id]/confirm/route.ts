@@ -4,14 +4,15 @@ import Reservation from '@/models/Reservation';
 import { verifyToken, adminOnly } from '@/lib/auth';
 import { sendReservationConfirmationEmail } from '@/lib/email';
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         const requester = await verifyToken(req);
         if (!requester || !adminOnly(requester)) return NextResponse.json({ message: 'Không có quyền!' }, { status: 403 });
 
         await connectDB();
         const { pickupDays = 3 } = await req.json();
-        const reservation = await Reservation.findById(params.id)
+        const reservation = await Reservation.findById(id)
             .populate('user', 'fullName email')
             .populate('book', 'title authorName coverImage');
 

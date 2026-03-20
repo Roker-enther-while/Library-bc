@@ -26,27 +26,31 @@ app.use((req, res, next) => {
     next();
 });
 
-// CORS – allow both localhost dev and Vercel production
+// CORS – allow localhost and production frontend
 const allowedOrigins = [
-    'http://localhost:5173',
     'http://localhost:3000',
-    process.env.FRONTEND_URL, // e.g. https://thuvien.vercel.app
+    'http://localhost:3001',
+    'http://localhost:5173',
+    process.env.FRONTEND_URL,
 ].filter(Boolean);
 
 app.use(cors({
     origin: (origin, callback) => {
-        // Allow if no origin (like mobile apps/curl) or if it's in allowedOrigins
-        // Or if it's a local network IP (192.168.x.x, 172.x.x.x, 10.x.x.x)
-        const isLocalNetwork = origin && (
+        // Allow if no origin (like mobile apps/curl/server-side)
+        if (!origin) return callback(null, true);
+
+        // Check if origin is in allowedOrigins OR matches a local IP pattern OR is a subdomain of authorized domain
+        const isAllowed = allowedOrigins.some(ao => origin.startsWith(ao));
+        const isLocal = origin.includes('localhost') ||
             origin.startsWith('http://192.168.') ||
             origin.startsWith('http://172.') ||
-            origin.startsWith('http://10.') ||
-            origin.startsWith('http://localhost')
-        );
+            origin.startsWith('http://10.');
 
-        if (!origin || allowedOrigins.includes(origin) || isLocalNetwork) {
+        if (isAllowed || isLocal) {
             return callback(null, true);
         }
+
+        console.warn(`[CORS Blocked] Origin: ${origin}`);
         callback(new Error('Not allowed by CORS'));
     },
     credentials: true,

@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import connectDB from '@/lib/db';
 import BorrowRecord from '@/models/BorrowRecord';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+        const { id } = await params;
         await connectDB();
-        const history = await BorrowRecord.find({ user: params.id })
+        const history = await BorrowRecord.find({ user: id })
             .populate('book', 'title coverImage authorName category')
             .sort({ createdAt: -1 });
         return NextResponse.json(history);

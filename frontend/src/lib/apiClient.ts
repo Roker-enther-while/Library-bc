@@ -2,10 +2,16 @@ import axios from 'axios';
 
 // NEXT_PUBLIC_API_URL=http://localhost:5000 (set in .env.local)
 // Khi build production, thay bằng URL backend thật
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+
+if (!BASE_URL && typeof window !== 'undefined') {
+    console.warn('NEXT_PUBLIC_API_URL is not defined. Defaulting to localhost:5000 for development.');
+}
+
+const FINAL_BASE_URL = BASE_URL || 'http://localhost:5000';
 
 const api = axios.create({
-    baseURL: `${BASE_URL}/api`,
+    baseURL: `${FINAL_BASE_URL}/api`,
 });
 
 // Request interceptor for auth token

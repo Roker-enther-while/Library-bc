@@ -6,8 +6,9 @@ import { getBooks, getCategories } from '@/lib/apiClient';
 import BookCard from '@/components/ui/BookCard';
 import ReservationModal from '@/components/ui/ReservationModal';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
-const CategoriesPage: React.FC = () => {
+function CategoriesContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const initialCategoryFromQuery = searchParams.get('category') || null;
@@ -151,6 +152,18 @@ const CategoriesPage: React.FC = () => {
                 />
             )}
         </div>
+    );
+}
+
+const CategoriesPage: React.FC = () => {
+    return (
+        <Suspense fallback={
+            <div className="min-h-screen bg-parchment dark:bg-dark-bg flex items-center justify-center">
+                <div className="w-12 h-12 border-4 border-vermillion border-t-transparent rounded-full animate-spin"></div>
+            </div>
+        }>
+            <CategoriesContent />
+        </Suspense>
     );
 };
 
