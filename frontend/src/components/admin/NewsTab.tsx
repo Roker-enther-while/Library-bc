@@ -2,7 +2,7 @@
 import React from 'react';
 import { Pencil, Trash2, Eye, EyeOff } from 'lucide-react';
 import { NewsItem } from '@/types';
-import { StatusBadge } from './MembersTab';
+import { StatusBadge } from './AdminUIHelper';
 
 const fmtDate = (iso: string) => {
     if (!iso) return 'N/A';

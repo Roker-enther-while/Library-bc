@@ -25,6 +25,23 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
+// Response interceptor for auth errors
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response?.status === 401) {
+            if (typeof window !== 'undefined') {
+                localStorage.removeItem('token');
+                localStorage.removeItem('adminToken');
+                localStorage.removeItem('user');
+                localStorage.removeItem('adminUser');
+                // Optional: window.location.href = '/dang-nhap'; 
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 // Global In-Memory Cache for GET requests
 const apiCache: Record<string, any> = {};
 
@@ -81,6 +98,26 @@ export const getAuthorById = async (id: string) => {
     return data;
 };
 
+export const addAuthor = async (authorData: any) => {
+    const { data } = await api.post('/authors', authorData);
+    delete apiCache['/authors'];
+    return data;
+};
+
+export const updateAuthor = async (id: string, authorData: any) => {
+    const { data } = await api.put(`/authors/${id}`, authorData);
+    delete apiCache['/authors'];
+    delete apiCache[`/authors/${id}`];
+    return data;
+};
+
+export const deleteAuthor = async (id: string) => {
+    const { data } = await api.delete(`/authors/${id}`);
+    delete apiCache['/authors'];
+    delete apiCache[`/authors/${id}`];
+    return data;
+};
+
 export const toggleFavorite = async (bookId: string) => {
     const { data } = await api.patch(`/auth/favorites/${bookId}`);
     return data;
@@ -122,6 +159,24 @@ export const getCategories = async () => {
     return data;
 };
 
+export const addCategory = async (categoryData: any) => {
+    const { data } = await api.post('/categories', categoryData);
+    delete apiCache['/categories'];
+    return data;
+};
+
+export const updateCategory = async (id: string, categoryData: any) => {
+    const { data } = await api.put(`/categories/${id}`, categoryData);
+    delete apiCache['/categories'];
+    return data;
+};
+
+export const deleteCategory = async (id: string) => {
+    const { data } = await api.delete(`/categories/${id}`);
+    delete apiCache['/categories'];
+    return data;
+};
+
 export const createReservation = async (bookId: string, note = '') => {
     const { data } = await api.post('/reservations', { bookId, note });
     return data;
@@ -130,16 +185,21 @@ export const createReservation = async (bookId: string, note = '') => {
 // Admin Services
 export const addBook = async (bookData: any) => {
     const { data } = await api.post('/books', bookData);
+    delete apiCache['/books'];
     return data;
 };
 
 export const updateBook = async (id: string, bookData: any) => {
     const { data } = await api.put(`/books/${id}`, bookData);
+    delete apiCache['/books'];
+    delete apiCache[`/books/${id}`];
     return data;
 };
 
 export const deleteBook = async (id: string) => {
     const { data } = await api.delete(`/books/${id}`);
+    delete apiCache['/books'];
+    delete apiCache[`/books/${id}`];
     return data;
 };
 

@@ -1,4 +1,4 @@
-import { IBook } from '@/models/Book';
+// Removed obsolete IBook import
 
 export const transformBook = (book: any) => {
     if (!book) return null;

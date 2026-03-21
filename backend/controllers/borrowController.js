@@ -5,6 +5,20 @@ const Copy = require('../models/Copy');
 const { sendDueReminders } = require('../services/cronJobs');
 const mongoose = require('mongoose');
 
+// Transform record for frontend consistency
+const transformRecord = (record) => {
+    if (!record) return null;
+    const obj = record.toObject ? record.toObject() : record;
+    return {
+        ...obj,
+        id: obj._id,
+        bookTitle: obj.book?.title || obj.bookTitle || 'Không rõ',
+        borrowerName: obj.user?.fullName || obj.borrowerName || 'Không rõ',
+        borrowerPhone: obj.user?.phone || obj.borrowerPhone || '',
+        borrowerStudentId: obj.user?.studentId || obj.borrowerStudentId || ''
+    };
+};
+
 // Create Borrow Record (Circulation)
 exports.createBorrow = async (req, res) => {
     try {
@@ -45,7 +59,7 @@ exports.createBorrow = async (req, res) => {
             await copy.save();
         }
 
-        res.status(201).json(record);
+        res.status(201).json(transformRecord(record));
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -86,7 +100,7 @@ exports.returnBook = async (req, res) => {
             await copy.save();
         }
 
-        res.json(record);
+        res.json(transformRecord(record));
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -111,7 +125,7 @@ exports.getAllBorrows = async (req, res) => {
             .populate('user', 'fullName studentId phone')
             .populate('book', 'title author category')
             .sort({ borrowDate: -1 });
-        res.json(borrows);
+        res.json(borrows.map(transformRecord));
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

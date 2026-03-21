@@ -1,6 +1,7 @@
 const Reservation = require('../models/Reservation');
 const Book = require('../models/Book');
 const User = require('../models/User');
+const BorrowRecord = require('../models/BorrowRecord');
 const { sendReservationConfirmationEmail, sendReservationCancelledEmail } = require('../services/emailService');
 
 // POST /api/reservations — user tạo đặt trước
@@ -139,15 +140,31 @@ const cancelReservation = async (req, res) => {
 // PATCH /api/reservations/:id/pickup — admin đánh dấu đã nhận
 const markPickedUp = async (req, res) => {
     try {
-        const reservation = await Reservation.findByIdAndUpdate(
-            req.params.id,
-            { status: 'picked_up', processedBy: req.user._id },
-            { returnDocument: 'after' }
-        );
-        if (!reservation) return res.status(404).json({ message: 'Không tìm thấy' });
-        res.json({ success: true, reservation });
+        const reservation = await Reservation.findById(req.params.id);
+        if (!reservation) return res.status(404).json({ message: 'Không tìm thấy đặt trước' });
+        if (reservation.status === 'picked_up') return res.status(400).json({ message: 'Sách đã được nhận trước đó' });
+
+        // Create Borrow Record
+        const dueDate = new Date();
+        dueDate.setDate(dueDate.getDate() + 14); // Default 14 days
+
+        await BorrowRecord.create({
+            user: reservation.user,
+            book: reservation.book,
+            librarianId: req.user._id,
+            dueDate,
+            status: 'borrowing'
+        });
+
+        // Update reservation
+        reservation.status = 'picked_up';
+        reservation.processedBy = req.user._id;
+        await reservation.save();
+
+        res.json({ success: true, message: 'Đã nhận sách và tạo phiếu mượn tự động', reservation });
     } catch (error) {
-        res.status(500).json({ message: 'Lỗi server' });
+        console.error('[PICKUP-ERROR]', error);
+        res.status(500).json({ message: 'Lỗi server: ' + error.message });
     }
 };
 

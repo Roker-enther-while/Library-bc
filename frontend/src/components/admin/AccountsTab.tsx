@@ -2,7 +2,7 @@
 import React from 'react';
 import { Pencil, Trash2, Shield, Lock, Unlock } from 'lucide-react';
 import { AdminUser } from '@/types';
-import { StatusBadge } from './MembersTab';
+import { StatusBadge } from './AdminUIHelper';
 
 interface AccountsTabProps {
     accounts: AdminUser[];
@@ -17,7 +17,7 @@ interface AccountsTabProps {
 const AccountsTab: React.FC<AccountsTabProps> = ({
     accounts, currentUserId, isAdmin, onAdd, onEdit, onDelete, onToggleStatus
 }) => {
-    const staffAccounts = accounts.filter(a => a.role === 'admin' || a.role === 'librarian');
+    const staffAccounts = accounts.filter((a: AdminUser) => a.role !== 'reader' || a.status === 'inactive');
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">

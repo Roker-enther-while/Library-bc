@@ -1,7 +1,7 @@
 'use client';
 import React from 'react';
 import { BookOpen, Check, X, Package } from 'lucide-react';
-import { StatusBadge } from './MembersTab';
+import { StatusBadge } from './AdminUIHelper';
 
 const fmtDate = (iso: string) => {
     if (!iso) return 'N/A';

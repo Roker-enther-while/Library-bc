@@ -274,7 +274,7 @@ const AIChatbot: React.FC = () => {
                                                 {renderMarkdown(msg.text)}
                                             </div>
 
-                                            {msg.type === 'bot' && (
+                                            {/* {msg.type === 'bot' && (
                                                 <button
                                                     onClick={() => copyToClipboard(msg.text, msg.id)}
                                                     className={`mt-1.5 flex items-center gap-1.5 px-2 py-1 rounded hover:bg-vermillion/5 transition-colors group/copy ${copiedId === msg.id ? 'text-green-600' : 'text-vermillion/40 hover:text-vermillion/70'
@@ -292,7 +292,7 @@ const AIChatbot: React.FC = () => {
                                                         </>
                                                     )}
                                                 </button>
-                                            )}
+                                            )} */}
 
                                             {msg.suggestions && msg.suggestions.length > 0 && (
                                                 <div className="mt-3 flex flex-wrap gap-2">

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Mail, RefreshCw, Check, X, AlertTriangle, MapPin, TrendingUp } from 'lucide-react';
 import { BorrowRecord } from '@/types';
-import { StatusBadge, Pagination } from './MembersTab';
+import { StatusBadge, Pagination } from './AdminUIHelper';
 
 const fmtDate = (iso: string) => {
     if (!iso) return 'N/A';

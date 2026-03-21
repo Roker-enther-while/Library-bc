@@ -142,28 +142,50 @@ const getReadingProgress = async (req, res) => {
     }
 };
 
+// Slugify helper for Vietnamese & special characters
+const slugify = (text) => {
+    if (!text) return '';
+    return text.toString().toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+        .replace(/[đĐ]/g, 'd')
+        .replace(/([^0-9a-z-\s])/g, '') // Remove non-alphanumeric except dash/space
+        .replace(/\s+/g, '-') // Replace spaces with -
+        .replace(/-+/g, '-') // Replace multiple -
+        .replace(/^-+/, '') // Trim starting -
+        .replace(/-+$/, ''); // Trim ending -
+};
+
 // Add book
 const addBook = async (req, res) => {
     try {
         const { quantity, shelfLocation, ...rest } = req.body;
+        if (!rest.title) return res.status(400).json({ message: 'Tiêu đề sách là bắt buộc' });
+
+        const generatedId = rest.id || rest._id || slugify(rest.title);
+
+        // Check if ID already exists
+        const existing = await Book.findById(generatedId);
+        if (existing) {
+            return res.status(400).json({ message: `Sách với ID "${generatedId}" đã tồn tại. Vui lòng kiểm tra lại tiêu đề.` });
+        }
+
         const book = new Book({
             ...rest,
-            _id: rest.id || rest._id || rest.title.toLowerCase().replace(/ /g, '-'),
-            publicationYear: rest.year || rest.publicationYear,
+            _id: generatedId,
+            publicationYear: parseInt(rest.year) || rest.publicationYear,
             coverImage: rest.coverUrl || rest.coverImage,
-            quantity: quantity || 1,
-            available: quantity || 1,
+            quantity: parseInt(quantity) || 1,
+            available: parseInt(quantity) || 1,
             shelfLocation: shelfLocation || ''
         });
         const created = await book.save();
 
         // Automatically create copies for tracking
         const copies = [];
-        for (let i = 0; i < (quantity || 1); i++) {
+        for (let i = 0; i < (parseInt(quantity) || 1); i++) {
             copies.push({
                 book: created._id,
                 barcode: `B${created._id.toString().slice(-4)}${Date.now().toString().slice(-4)}${i}`,
-                shelfLocation: shelfLocation || '',
                 status: 'available'
             });
         }
@@ -171,21 +193,32 @@ const addBook = async (req, res) => {
 
         res.status(201).json(transformBook(created));
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
 // Update book
 const updateBook = async (req, res) => {
     try {
-        const book = await Book.findByIdAndUpdate(req.params.id, req.body, { returnDocument: 'after' });
+        const { _id, id, ...updateData } = req.body; // Remove ID from body to prevent Mongo error
+
+        // Ensure year, quantity, available are numbers if present
+        if (updateData.year) updateData.publicationYear = parseInt(updateData.year);
+        if (updateData.quantity) updateData.quantity = parseInt(updateData.quantity);
+        if (updateData.available) updateData.available = parseInt(updateData.available);
+
+        const book = await Book.findByIdAndUpdate(req.params.id, updateData, {
+            runValidators: true,
+            new: true
+        });
+
         if (book) {
             res.json(transformBook(book));
         } else {
-            res.status(404).json({ message: 'Book not found' });
+            res.status(404).json({ message: 'Không tìm thấy sách' });
         }
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
