@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { getBooks, getBookById, getChapter, saveReadingProgress, getReadingProgress, addBook, updateBook, deleteBook, searchBooks, getAdminStats } = require('../controllers/bookController');
 const { protect, adminOnly } = require('../middleware/auth');
+const { auditLogger } = require('../middleware/securityMiddleware');
 
 router.get('/stats', protect, adminOnly, getAdminStats);
 const { cacheMiddleware, clearCache } = require('../middleware/cache');
@@ -14,8 +15,8 @@ router.route('/:id/progress').get(protect, getReadingProgress).post(protect, sav
 router.get('/:id', cacheMiddleware, getBookById);
 
 // Thêm hooks clearCache sau khi thay đổi dữ liệu (nâng cao)
-router.post('/', protect, adminOnly, (req, res, next) => { clearCache('/api/books'); next(); }, addBook);
-router.put('/:id', protect, adminOnly, (req, res, next) => { clearCache('/api/books'); next(); }, updateBook);
-router.delete('/:id', protect, adminOnly, (req, res, next) => { clearCache('/api/books'); next(); }, deleteBook);
+router.post('/', protect, adminOnly, auditLogger, (req, res, next) => { clearCache('/api/books'); next(); }, addBook);
+router.put('/:id', protect, adminOnly, auditLogger, (req, res, next) => { clearCache('/api/books'); next(); }, updateBook);
+router.delete('/:id', protect, adminOnly, auditLogger, (req, res, next) => { clearCache('/api/books'); next(); }, deleteBook);
 
 module.exports = router;

@@ -1,0 +1,1802 @@
+[
+    {
+        "id": "001",
+        "author": "Lý Công Uẩn",
+        "title": "Chiếu dời đô",
+        "category": "Chiếu",
+        "period": "TK XI",
+        "language": "Hán",
+        "note": "Văn bản lịch sử quan trọng dời đô về Thăng Long"
+    },
+    {
+        "id": "002",
+        "author": "Lý Thường Kiệt",
+        "title": "Nam quốc sơn hà",
+        "category": "Thơ",
+        "period": "TK XI",
+        "language": "Hán",
+        "note": "Bản tuyên ngôn độc lập đầu tiên"
+    },
+    {
+        "id": "003",
+        "author": "Mãn Giác Thiền sư",
+        "title": "Cáo tật thị chúng",
+        "category": "Thơ kệ",
+        "period": "TK XI",
+        "language": "Hán",
+        "note": "Bài thơ thiền nổi tiếng về quy luật tự nhiên"
+    },
+    {
+        "id": "004",
+        "author": "Trần Quốc Tuấn",
+        "title": "Hịch tướng sĩ",
+        "category": "Hịch",
+        "period": "TK XIII",
+        "language": "Hán",
+        "note": "Lời kêu gọi hào hùng chống quân Nguyên"
+    },
+    {
+        "id": "005",
+        "author": "Trần Quang Khải",
+        "title": "Tụng giá hoàn kinh sư",
+        "category": "Thơ",
+        "period": "TK XIII",
+        "language": "Hán",
+        "note": "Bài thơ mừng chiến thắng chống ngoại xâm"
+    },
+    {
+        "id": "006",
+        "author": "Phạm Ngũ Lão",
+        "title": "Thuật hoài",
+        "category": "Thơ",
+        "period": "TK XIV",
+        "language": "Hán",
+        "note": "Bày tỏ chí nam nhi thời Trần"
+    },
+    {
+        "id": "007",
+        "author": "Trương Hán Siêu",
+        "title": "Phú sông Bạch Đằng",
+        "category": "Phú",
+        "period": "TK XIV",
+        "language": "Hán",
+        "note": "Ngợi ca chiến công trên sông Bạch Đằng"
+    },
+    {
+        "id": "008",
+        "author": "Nguyễn Phi Khanh",
+        "title": "Cúc đường di tập",
+        "category": "Thơ tập",
+        "period": "TK XV",
+        "language": "Hán",
+        "note": "Tác phẩm của thân phụ Nguyễn Trãi"
+    },
+    {
+        "id": "009",
+        "author": "Nguyễn Trãi",
+        "title": "Bình Ngô đại cáo",
+        "category": "Cáo",
+        "period": "TK XV",
+        "language": "Hán",
+        "note": "Bản tuyên ngôn độc lập thứ hai"
+    },
+    {
+        "id": "010",
+        "author": "Nguyễn Trãi",
+        "title": "Quốc âm thi tập",
+        "category": "Thơ Nôm",
+        "period": "TK XV",
+        "language": "Nôm",
+        "note": "Tập thơ Nôm sớm nhất còn sót lại"
+    },
+    {
+        "id": "011",
+        "author": "Nguyễn Trãi",
+        "title": "Quân trung từ mệnh tập",
+        "category": "Văn xuôi",
+        "period": "TK XV",
+        "language": "Hán",
+        "note": "Văn kiện ngoại giao thời Lê Sơ"
+    },
+    {
+        "id": "012",
+        "author": "Nguyễn Trãi",
+        "title": "Ức Trai thi tập",
+        "category": "Thơ Hán",
+        "period": "TK XV",
+        "language": "Hán",
+        "note": "Di sản thơ ca đồ sộ"
+    },
+    {
+        "id": "013",
+        "author": "Nguyễn Trãi",
+        "title": "Dư địa chí",
+        "category": "Địa lý",
+        "period": "TK XV",
+        "language": "Hán",
+        "note": "Sách địa lý sớm nhất Việt Nam"
+    },
+    {
+        "id": "014",
+        "author": "Lê Thánh Tông",
+        "title": "Hồng Đức quốc âm thi tập",
+        "category": "Thơ Nôm",
+        "period": "TK XV",
+        "language": "Nôm",
+        "note": "Tác phẩm của Tao Đàn nhị thập bát tú"
+    },
+    {
+        "id": "015",
+        "author": "Lê Thánh Tông",
+        "title": "Thập giới cô hồn quốc ngữ văn",
+        "category": "Văn tế",
+        "period": "TK XV",
+        "language": "Nôm",
+        "note": "Văn tế bằng chữ Nôm"
+    },
+    {
+        "id": "016",
+        "author": "Ngô Sĩ Liên",
+        "title": "Đại Việt sử ký toàn thư",
+        "category": "Sử ký",
+        "period": "TK XV",
+        "language": "Hán",
+        "note": "Bộ chính sử quan trọng nhất thời trung đại"
+    },
+    {
+        "id": "017",
+        "author": "Nguyễn Dữ",
+        "title": "Truyền kỳ mạn lục",
+        "category": "Truyện kỳ ảo",
+        "period": "TK XVI",
+        "language": "Hán",
+        "note": "Thiên cổ kỳ bút"
+    },
+    {
+        "id": "018",
+        "author": "Nguyễn Bỉnh Khiêm",
+        "title": "Bạch Vân quốc ngữ thi",
+        "category": "Thơ Nôm",
+        "period": "TK XVI",
+        "language": "Nôm",
+        "note": "Thơ triết lý của Trạng Trình"
+    },
+    {
+        "id": "019",
+        "author": "Nguyễn Bỉnh Khiêm",
+        "title": "Bạch Vân am thi tập",
+        "category": "Thơ Hán",
+        "period": "TK XVI",
+        "language": "Hán",
+        "note": "Tập thơ Hán của Nguyễn Bỉnh Khiêm"
+    },
+    {
+        "id": "020",
+        "author": "Đặng Trần Côn",
+        "title": "Chinh phụ ngâm",
+        "category": "Ngâm khúc",
+        "period": "TK XVIII",
+        "language": "Hán",
+        "note": "Nguyên tác chữ Hán về nỗi lòng người chinh phụ"
+    },
+    {
+        "id": "021",
+        "author": "Đoàn Thị Điểm",
+        "title": "Chinh phụ ngâm (diễn Nôm)",
+        "category": "Ngâm khúc",
+        "period": "TK XVIII",
+        "language": "Nôm",
+        "note": "Bản dịch nổi tiếng nhất sang tiếng Việt"
+    },
+    {
+        "id": "022",
+        "author": "Nguyễn Gia Thiều",
+        "title": "Cung oán ngâm khúc",
+        "category": "Ngâm khúc",
+        "period": "TK XVIII",
+        "language": "Nôm",
+        "note": "Lời ai oán của người cung nữ"
+    },
+    {
+        "id": "023",
+        "author": "Lê Hữu Trác",
+        "title": "Thượng kinh ký sự",
+        "category": "Ký",
+        "period": "TK XVIII",
+        "language": "Hán",
+        "note": "Ghi chép về chuyến đi kinh đô của Hải Thượng Lãn Ông"
+    },
+    {
+        "id": "024",
+        "author": "Phạm Đình Hổ",
+        "title": "Vũ trung tùy bút",
+        "category": "Tùy bút",
+        "period": "TK XVIII",
+        "language": "Hán",
+        "note": "Những ghi chép trong ngày mưa"
+    },
+    {
+        "id": "025",
+        "author": "Ngô Gia Văn Phái",
+        "title": "Hoàng Lê nhất thống chí",
+        "category": "Tiểu thuyết chương hồi",
+        "period": "TK XVIII-XIX",
+        "language": "Hán",
+        "note": "Tác phẩm lịch sử văn học xuất sắc nhất"
+    },
+    {
+        "id": "026",
+        "author": "Nguyễn Du",
+        "title": "Truyện Kiều",
+        "category": "Truyện thơ Nôm",
+        "period": "TK XIX",
+        "language": "Nôm",
+        "note": "Kiệt tác số 1 của văn chương Việt Nam"
+    },
+    {
+        "id": "027",
+        "author": "Nguyễn Du",
+        "title": "Thanh Hiên thi tập",
+        "category": "Thơ Hán",
+        "period": "TK XVIII-XIX",
+        "language": "Hán",
+        "note": "Cùng với Nam trung tạp ngâm, Bắc hành tạp lục"
+    },
+    {
+        "id": "028",
+        "author": "Nguyễn Du",
+        "title": "Văn tế thập loại chúng sinh",
+        "category": "Văn tế",
+        "period": "TK XIX",
+        "language": "Nôm",
+        "note": "Lòng thương cảm với mọi kiếp người"
+    },
+    {
+        "id": "029",
+        "author": "Hồ Xuân Hương",
+        "title": "Tự tình (II)",
+        "category": "Thơ Nôm",
+        "period": "TK XIX",
+        "language": "Nôm",
+        "note": "Tiếng nói nữ quyền và khát vọng sống"
+    },
+    {
+        "id": "030",
+        "author": "Hồ Xuân Hương",
+        "title": "Bánh trôi nước",
+        "category": "Thơ Nôm",
+        "period": "TK XIX",
+        "language": "Nôm",
+        "note": "Khẳng định phẩm giá người phụ nữ"
+    },
+    {
+        "id": "031",
+        "author": "Bà Huyện Thanh Quan",
+        "title": "Qua Đèo Ngang",
+        "category": "Thơ Nôm",
+        "period": "TK XIX",
+        "language": "Nôm",
+        "note": "Nỗi nhớ nhà và tình yêu thiên nhiên"
+    },
+    {
+        "id": "032",
+        "author": "Nguyễn Đình Chiểu",
+        "title": "Lục Vân Tiên",
+        "category": "Truyện thơ Nôm",
+        "period": "TK XIX",
+        "language": "Nôm",
+        "note": "Đề cao đạo lý nhân nghĩa ở Nam Bộ"
+    },
+    {
+        "id": "033",
+        "author": "Nguyễn Đình Chiểu",
+        "title": "Văn tế nghĩa sĩ Cần Giuộc",
+        "category": "Văn tế",
+        "period": "TK XIX",
+        "language": "Nôm",
+        "note": "Tượng đài bất tử về người nông dân kháng Pháp"
+    },
+    {
+        "id": "034",
+        "author": "Nguyễn Khuyến",
+        "title": "Thu điếu",
+        "category": "Thơ Nôm",
+        "period": "TK XIX",
+        "language": "Nôm",
+        "note": "Một trong ba bài thơ thu hay nhất"
+    },
+    {
+        "id": "035",
+        "author": "Nguyễn Khuyến",
+        "title": "Thu vịnh",
+        "category": "Thơ Nôm",
+        "period": "TK XIX",
+        "language": "Nôm",
+        "note": "Nằm trong chùm thơ thu nổi tiếng"
+    },
+    {
+        "id": "036",
+        "author": "Nguyễn Khuyến",
+        "title": "Thu ẩm",
+        "category": "Thơ Nôm",
+        "period": "TK XIX",
+        "language": "Nôm",
+        "note": "Diễn tả không gian và tâm trạng mùa thu"
+    },
+    {
+        "id": "037",
+        "author": "Trần Tế Xương",
+        "title": "Thương vợ",
+        "category": "Thơ Nôm",
+        "period": "TK XIX-XX",
+        "language": "Nôm",
+        "note": "Lời cảm ơn xúc động dành cho người vợ"
+    },
+    {
+        "id": "038",
+        "author": "Trần Tế Xương",
+        "title": "Vịnh khoa thi Hương",
+        "category": "Thơ Nôm",
+        "period": "TK XIX-XX",
+        "language": "Nôm",
+        "note": "Châm biếm xã hội nửa Tây nửa ta"
+    },
+    {
+        "id": "039",
+        "author": "Phan Bội Châu",
+        "title": "Hải ngoại huyết thư",
+        "category": "Văn cách mạng",
+        "period": "TK XX",
+        "language": "Nôm/Quốc ngữ",
+        "note": "Lời kêu gọi cứu quốc từ nước ngoài"
+    },
+    {
+        "id": "040",
+        "author": "Nguyễn Ái Quốc",
+        "title": "Bản án chế độ thực dân Pháp",
+        "category": "Chính luận",
+        "period": "TK XX",
+        "language": "Pháp/Việt",
+        "note": "Tố cáo tội ác thực dân"
+    },
+    {
+        "id": "041",
+        "author": "Hồ Chí Minh",
+        "title": "Nhật ký trong tù",
+        "category": "Thơ Hán",
+        "period": "TK XX",
+        "language": "Hán",
+        "note": "Tập thơ sáng tác trong nhà lao Tưởng Giới Thạch"
+    },
+    {
+        "id": "042",
+        "author": "Tản Đà",
+        "title": "Thơ Tản Đà",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Cầu nối giữa thơ cũ và Thơ mới"
+    },
+    {
+        "id": "043",
+        "author": "Tố Hữu",
+        "title": "Từ ấy",
+        "category": "Thơ cách mạng",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Dấu mốc giác ngộ lý tưởng Cộng sản"
+    },
+    {
+        "id": "044",
+        "author": "Ngô Tất Tố",
+        "title": "Tắt đèn",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Phản ánh cực khổ của nông dân trước CM"
+    },
+    {
+        "id": "045",
+        "author": "Vũ Trọng Phụng",
+        "title": "Số đỏ",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Châm biếm xã hội Âu hóa rởm đời"
+    },
+    {
+        "id": "046",
+        "author": "Vũ Trọng Phụng",
+        "title": "Giông tố",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Bức tranh hiện thực xã hội Việt Nam đương thời"
+    },
+    {
+        "id": "047",
+        "author": "Nam Cao",
+        "title": "Chí Phèo",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tấn bi kịch người nông dân bị tha hóa"
+    },
+    {
+        "id": "048",
+        "author": "Nam Cao",
+        "title": "Sống mòn",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Nỗi đau của trí thức nghèo giáo Thứ"
+    },
+    {
+        "id": "049",
+        "author": "Nam Cao",
+        "title": "Lão Hạc",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Lòng tự trọng của người nông dân nghèo"
+    },
+    {
+        "id": "050",
+        "author": "Nguyễn Tuân",
+        "title": "Vang bóng một thời",
+        "category": "Tập truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Vẻ đẹp văn hóa truyền thống đã mai một"
+    },
+    {
+        "id": "051",
+        "author": "Thạch Lam",
+        "title": "Gió lạnh đầu mùa",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Những câu chuyện nhẹ nhàng, đậm chất nhân văn"
+    },
+    {
+        "id": "052",
+        "author": "Thạch Lam",
+        "title": "Hai đứa trẻ",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Ước mơ nhỏ nhoi của những đứa trẻ nghèo phố huyện"
+    },
+    {
+        "id": "053",
+        "author": "Nhất Linh",
+        "title": "Đoạn tuyệt",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Cổ vũ lối sống mới, thoát khỏi phong kiến"
+    },
+    {
+        "id": "054",
+        "author": "Khái Hưng",
+        "title": "Hồn bướm mơ tiên",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Mối tình mang màu sắc tôn giáo và lý tưởng"
+    },
+    {
+        "id": "055",
+        "author": "Thế Lữ",
+        "title": "Nhớ rừng",
+        "category": "Thơ mới",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tâm thế u uất và khao khát tự do"
+    },
+    {
+        "id": "056",
+        "author": "Xuân Diệu",
+        "title": "Vội vàng",
+        "category": "Thơ mới",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Quan niệm sống cuồng nhiệt và tích cực"
+    },
+    {
+        "id": "057",
+        "author": "Xuân Diệu",
+        "title": "Thơ thơ",
+        "category": "Tập thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Khởi đầu rực rỡ của 'Ông hoàng thơ tình'"
+    },
+    {
+        "id": "058",
+        "author": "Huy Cận",
+        "title": "Tràng giang",
+        "category": "Thơ mới",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Nỗi sầu nhân thế trước thiên nhiên bao la"
+    },
+    {
+        "id": "059",
+        "author": "Huy Cận",
+        "title": "Lửa thiêng",
+        "category": "Tập thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tập thơ đầu tiêu biểu của Huy Cận"
+    },
+    {
+        "id": "060",
+        "author": "Hàn Mặc Tử",
+        "title": "Đây thôn Vĩ Dạ",
+        "category": "Thơ mới",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Bức tranh làng quê dịu dàng và u buồn"
+    },
+    {
+        "id": "061",
+        "author": "Hàn Mặc Tử",
+        "title": "Gái quê",
+        "category": "Tập thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Vẻ đẹp trần thế trước khi đi vào loạn tưởng"
+    },
+    {
+        "id": "062",
+        "author": "Chế Lan Viên",
+        "title": "Điêu tàn",
+        "category": "Tập thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Trường phái thơ Loạn"
+    },
+    {
+        "id": "063",
+        "author": "Nguyễn Bính",
+        "title": "Chân quê",
+        "category": "Thơ mới",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Giữ gìn tâm hồn quê giữa làn sóng Tây hóa"
+    },
+    {
+        "id": "064",
+        "author": "Nguyễn Huy Tưởng",
+        "title": "Vĩnh biệt Cửu Trùng Đài",
+        "category": "Kịch",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Bi kịch của người nghệ sĩ Vũ Như Tô"
+    },
+    {
+        "id": "065",
+        "author": "Hồ Chí Minh",
+        "title": "Tuyên ngôn Độc lập",
+        "category": "Chính luận",
+        "period": "1945",
+        "language": "Quốc ngữ",
+        "note": "Khai sinh nước Việt Nam Dân chủ Cộng hòa"
+    },
+    {
+        "id": "066",
+        "author": "Tô Hoài",
+        "title": "Dế Mèn phiêu lưu ký",
+        "category": "Truyện thiếu nhi",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tác phẩm cho thiếu nhi nổi tiếng nhất"
+    },
+    {
+        "id": "067",
+        "author": "Tô Hoài",
+        "title": "Vợ chồng A Phủ",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Cuộc đời đồng bào miền núi dưới ách thống trị"
+    },
+    {
+        "id": "068",
+        "author": "Nguyên Hồng",
+        "title": "Bỉ vỏ",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Số phận người phụ nữ dưới đáy xã hội"
+    },
+    {
+        "id": "069",
+        "author": "Nguyên Hồng",
+        "title": "Những ngày thơ ấu",
+        "category": "Hồi ký",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tuổi thơ đầy cay đắng và khát khao tình mẹ"
+    },
+    {
+        "id": "070",
+        "author": "Quang Dũng",
+        "title": "Tây Tiến",
+        "category": "Thơ kháng chiến",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Vẻ đẹp hào hoa, bi tráng của người lính"
+    },
+    {
+        "id": "071",
+        "author": "Tố Hữu",
+        "title": "Việt Bắc",
+        "category": "Thơ kháng chiến",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Bản tình ca về nghĩa tình quân dân"
+    },
+    {
+        "id": "072",
+        "author": "Nguyễn Khoa Điềm",
+        "title": "Đất nước (Trích Trường ca Mặt đường khát vọng)",
+        "category": "Trường ca",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tư tưởng mới về đất nước của nhân dân"
+    },
+    {
+        "id": "073",
+        "author": "Phạm Tiến Duật",
+        "title": "Bài thơ về tiểu đội xe không kính",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Khắc họa vẻ đẹp hiên ngang của chiến sĩ lái xe"
+    },
+    {
+        "id": "074",
+        "author": "Anh Đức",
+        "title": "Hòn Đất",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Cuộc chiến đấu kiên cường ở miền Nam"
+    },
+    {
+        "id": "075",
+        "author": "Nguyễn Trung Thành",
+        "title": "Rừng xà nu",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Sức sống mãnh liệt của dân tộc Tây Nguyên"
+    },
+    {
+        "id": "076",
+        "author": "Nguyễn Khải",
+        "title": "Mùa lạc",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Sự hồi sinh của vùng đất bị tàn phá"
+    },
+    {
+        "id": "077",
+        "author": "Ma Văn Kháng",
+        "title": "Mùa lá rụng trong vườn",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Xung đột truyền thống và hiện đại trong gia đình"
+    },
+    {
+        "id": "078",
+        "author": "Lê Lựu",
+        "title": "Thời xa vắng",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Số phận cá nhân và thời đại"
+    },
+    {
+        "id": "079",
+        "author": "Bảo Ninh",
+        "title": "Nỗi buồn chiến tranh",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Góc nhìn khác về chiến tranh, vang danh quốc tế"
+    },
+    {
+        "id": "080",
+        "author": "Nguyễn Minh Châu",
+        "title": "Chiếc thuyền ngoài xa",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Những nghịch lý của cuộc đời hiện thực"
+    },
+    {
+        "id": "081",
+        "author": "Nguyễn Minh Châu",
+        "title": "Bến quê",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Những chiêm nghiệm muột màng về cuộc sống"
+    },
+    {
+        "id": "082",
+        "author": "Nguyễn Huy Thiệp",
+        "title": "Tướng về hưu",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Mở đầu luồng văn học đổi mới"
+    },
+    {
+        "id": "083",
+        "author": "Nguyễn Huy Thiệp",
+        "title": "Không có vua",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Góc nhìn trần trụi về đạo đức gia đình"
+    },
+    {
+        "id": "084",
+        "author": "Lưu Quang Vũ",
+        "title": "Hồn Trương Ba, da hàng thịt",
+        "category": "Kịch",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Vấn đề sống thật với chính mình"
+    },
+    {
+        "id": "085",
+        "author": "Xuân Quỳnh",
+        "title": "Sóng",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tiếng lòng phụ nữ khao khát tình yêu"
+    },
+    {
+        "id": "086",
+        "author": "Hoài Thanh, Hoài Chân",
+        "title": "Thi nhân Việt Nam",
+        "category": "Phê bình văn học",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Công trình tổng kết phong trào Thơ mới"
+    },
+    {
+        "id": "087",
+        "author": "Nguyễn Nhật Ánh",
+        "title": "Kính vạn hoa",
+        "category": "Truyện thiếu nhi",
+        "period": "TK XX-XXI",
+        "language": "Quốc ngữ",
+        "note": "Bộ truyện thiếu nhi bất hủ"
+    },
+    {
+        "id": "088",
+        "author": "Nguyễn Ngọc Tư",
+        "title": "Cánh đồng bất tận",
+        "category": "Tập truyện ngắn",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Dấu ấn văn chương Nam bộ hiện đại"
+    },
+    {
+        "id": "089",
+        "author": "Trần Đăng Khoa",
+        "title": "Góc sân và khoảng trời",
+        "category": "Thơ thiếu nhi",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Vẻ đẹp trong mắt 'thần đồng thơ'"
+    },
+    {
+        "id": "090",
+        "author": "Bùi Giáng",
+        "title": "Mưa nguồn",
+        "category": "Tập thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Thi sĩ kỳ tài với phong cách lạ lùng"
+    },
+    {
+        "id": "091",
+        "author": "Vũ Bằng",
+        "title": "Thương nhớ mười hai",
+        "category": "Tùy bút",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Nỗi nhớ phong vị quê hương Bắc bộ"
+    },
+    {
+        "id": "092",
+        "author": "Nguyên Sa",
+        "title": "Áo lụa Hà Đông",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Thơ tình lãng mạn miền Nam"
+    },
+    {
+        "id": "093",
+        "author": "Nguyễn Phan Quế Mai",
+        "title": "The Mountains Sing (Tro bụi trong gió)",
+        "category": "Tiểu thuyết",
+        "period": "TK XXI",
+        "language": "Anh/Việt",
+        "note": "Gây tiếng vang trên văn đàn thế giới"
+    },
+    {
+        "id": "094",
+        "author": "Phạm Quỳnh",
+        "title": "Thượng Chi văn tập",
+        "category": "Luận thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Đóng góp cho ngôn ngữ Quốc ngữ"
+    },
+    {
+        "id": "095",
+        "author": "Nguyễn Đổng Chi",
+        "title": "Kho tàng truyện cổ tích Việt Nam",
+        "category": "Sưu tầm",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tập hợp đồ sộ các câu chuyện dân gian"
+    },
+    {
+        "id": "096",
+        "author": "Trương Vĩnh Ký",
+        "title": "Chuyện đời xưa",
+        "category": "Truyện",
+        "period": "TK XIX",
+        "language": "Quốc ngữ",
+        "note": "Tác phẩm Quốc ngữ giai đoạn đầu"
+    },
+    {
+        "id": "097",
+        "author": "Phan Châu Trinh",
+        "title": "Tây Hồ thi tập",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Chí khí của nhà cách mạng"
+    },
+    {
+        "id": "098",
+        "author": "Huỳnh Thúc Kháng",
+        "title": "Bài ca tự do",
+        "category": "Văn chính luận",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tiếng nói của trí thức yêu nước"
+    },
+    {
+        "id": "099",
+        "author": "Dương Thu Hương",
+        "title": "Những thiên đường mù",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Góc nhìn phản biện xã hội"
+    },
+    {
+        "id": "100",
+        "author": "Duy Khán",
+        "title": "Tuổi thơ im lặng",
+        "category": "Hồi ký",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Ghi chép chân thực về miền quê nghèo"
+    },
+    {
+        "id": "101",
+        "author": "Ngô Gia Văn Phái",
+        "title": "Ngô Gia văn phái tổng tập",
+        "category": "Tổng hợp",
+        "period": "TK XVIII-XIX",
+        "language": "Hán",
+        "note": "Sáng tác của dòng họ Ngô Thì"
+    },
+    {
+        "id": "102",
+        "author": "Hồ Xuân Hương",
+        "title": "Lưu hương ký",
+        "category": "Tập thơ",
+        "period": "TK XIX",
+        "language": "Nôm/Hán",
+        "note": "Tập thơ mới phát hiện của Hồ Xuân Hương"
+    },
+    {
+        "id": "103",
+        "author": "Nguyễn Trãi",
+        "title": "Băng Hồ di sự lục",
+        "category": "Truyện lịch sử",
+        "period": "TK XV",
+        "language": "Hán",
+        "note": "Kể về danh nhân Trần Nguyên Đán"
+    },
+    {
+        "id": "104",
+        "author": "Chu Văn An",
+        "title": "Thất trảm sớ",
+        "category": "Sớ",
+        "period": "TK XIV",
+        "language": "Hán",
+        "note": "Khí tiết của người thầy vĩ đại"
+    },
+    {
+        "id": "105",
+        "author": "Phan Phu Tiên",
+        "title": "Bản thảo thực vật toát yếu",
+        "category": "Y học",
+        "period": "TK XV",
+        "language": "Hán",
+        "note": "Sách về dược tính thực vật xưa"
+    },
+    {
+        "id": "106",
+        "author": "Lương Thế Vinh",
+        "title": "Đại thành toán pháp",
+        "category": "Toán học",
+        "period": "TK XV",
+        "language": "Hán",
+        "note": "Sách toán của Trạng Lường"
+    },
+    {
+        "id": "107",
+        "author": "Vũ Quỳnh",
+        "title": "Lĩnh Nam chích quái",
+        "category": "Truyện dân gian",
+        "period": "TK XV",
+        "language": "Hán",
+        "note": "Sưu tập truyện kỳ bí nước Nam"
+    },
+    {
+        "id": "108",
+        "author": "Lý Tế Xuyên",
+        "title": "Việt điện u linh tập",
+        "category": "Truyện thần thoại",
+        "period": "TK XIV",
+        "language": "Hán",
+        "note": "Ghi chép về thần linh Việt Nam"
+    },
+    {
+        "id": "109",
+        "author": "Lê Quý Đôn",
+        "title": "Hiến chương loại chí",
+        "category": "Bách khoa toàn thư",
+        "period": "TK XVIII",
+        "language": "Hán",
+        "note": "Kiến thức toàn diện triều đại xưa"
+    },
+    {
+        "id": "110",
+        "author": "Phạm Công",
+        "title": "Phạm Công - Cúc Hoa",
+        "category": "Truyện thơ Nôm",
+        "period": "TK XVIII",
+        "language": "Nôm",
+        "note": "Truyện Nôm bình dân phổ biến"
+    },
+    {
+        "id": "111",
+        "author": "Khuyết danh",
+        "title": "Thạch Sanh",
+        "category": "Truyện thơ Nôm",
+        "period": "TK XVIII",
+        "language": "Nôm",
+        "note": "Truyện cổ tích diễn thơ"
+    },
+    {
+        "id": "112",
+        "author": "Khuyết danh",
+        "title": "Nhị độ mai",
+        "category": "Truyện thơ Nôm",
+        "period": "TK XIX",
+        "language": "Nôm",
+        "note": "Truyện Nôm phỏng theo Trung Quốc"
+    },
+    {
+        "id": "113",
+        "author": "Nguyễn Huy Tự",
+        "title": "Hoa tiên",
+        "category": "Truyện thơ Nôm",
+        "period": "TK XVIII",
+        "language": "Nôm",
+        "note": "Tác phẩm của dòng họ Nguyễn Huy"
+    },
+    {
+        "id": "114",
+        "author": "Phan Huy Ích",
+        "title": "Dụ Am ngâm lục",
+        "category": "Thơ tập",
+        "period": "TK XIX",
+        "language": "Hán",
+        "note": "Thơ của nhà ngoại giao tài năng"
+    },
+    {
+        "id": "115",
+        "author": "Trần Cao Vân",
+        "title": "Trung quân thi tập",
+        "category": "Thơ",
+        "period": "TK XIX",
+        "language": "Hán",
+        "note": "Thơ của nhà yêu nước"
+    },
+    {
+        "id": "116",
+        "author": "Nguyễn Việt Hà",
+        "title": "Cơ hội của Chúa",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tư duy mới về giới trẻ thành thị"
+    },
+    {
+        "id": "117",
+        "author": "Thuận",
+        "title": "Chinatown",
+        "category": "Tiểu thuyết",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Được dịch ra nhiều thứ tiếng"
+    },
+    {
+        "id": "118",
+        "author": "Vi Thùy Linh",
+        "title": "Linh",
+        "category": "Thơ",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Sự táo bạo của thơ trẻ"
+    },
+    {
+        "id": "119",
+        "author": "Nguyễn Xuân Khánh",
+        "title": "Mẫu thượng ngàn",
+        "category": "Tiểu thuyết",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Kết hợp lịch sử và tín ngưỡng"
+    },
+    {
+        "id": "120",
+        "author": "Nguyễn Xuân Khánh",
+        "title": "Hồ Quý Ly",
+        "category": "Tiểu thuyết lịch sử",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Xây dựng lại hình tượng vị vua cải cách"
+    },
+    {
+        "id": "121",
+        "author": "Lưu Quang Vũ",
+        "title": "Tôi và chúng ta",
+        "category": "Kịch",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Phản ánh đổi mới tư duy kinh tế"
+    },
+    {
+        "id": "122",
+        "author": "Vũ Ngọc Phan",
+        "title": "Nhà văn hiện đại",
+        "category": "Phê bình",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Khảo cứu nhà văn thời tiền chiến"
+    },
+    {
+        "id": "123",
+        "author": "Hoàng Phủ Ngọc Tường",
+        "title": "Ai đã đặt tên cho dòng sông?",
+        "category": "Bút ký",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Vẻ đẹp trữ tình của sông Hương"
+    },
+    {
+        "id": "124",
+        "author": "Thanh Hải",
+        "title": "Mùa xuân nho nhỏ",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Ước nguyện hiến dâng cho đời"
+    },
+    {
+        "id": "125",
+        "author": "Nguyễn Khoa Điềm",
+        "title": "Khúc hát ru những em bé lớn trên lưng mẹ",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tình mẹ trong kháng chiến chống Mỹ"
+    },
+    {
+        "id": "126",
+        "author": "Chế Lan Viên",
+        "title": "Tiếng hát con tàu",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Lời kêu gọi đi xây dựng kinh tế miền núi"
+    },
+    {
+        "id": "127",
+        "author": "Bằng Việt",
+        "title": "Bếp lửa",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Kỷ niệm về bà và tuổi thơ"
+    },
+    {
+        "id": "128",
+        "author": "Nguyễn Duy",
+        "title": "Tre Việt Nam",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Biểu tượng tâm hồn Việt"
+    },
+    {
+        "id": "129",
+        "author": "Đoàn Văn Cừ",
+        "title": "Chợ Tết",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Cảnh làng quê trù phú dịp Tết"
+    },
+    {
+        "id": "130",
+        "author": "Hoàng Cầm",
+        "title": "Bên kia sông Đuống",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Nỗi nhớ quê hương đầy hoài niệm"
+    },
+    {
+        "id": "131",
+        "author": "Vũ Cao",
+        "title": "Núi Đôi",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Chuyện tình cảm động thời chiến"
+    },
+    {
+        "id": "132",
+        "author": "Chính Hữu",
+        "title": "Đồng chí",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tình đồng đội bền chặt"
+    },
+    {
+        "id": "133",
+        "author": "Gia Dũng",
+        "title": "2000 bài thơ tình Việt Nam",
+        "category": "Tuyển tập",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Bộ tuyển tập thơ lớn"
+    },
+    {
+        "id": "134",
+        "author": "Nguyễn Thành Long",
+        "title": "Lặng lẽ Sa Pa",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tôn vinh những người lao động thầm lặng"
+    },
+    {
+        "id": "135",
+        "author": "Lê Minh Khuê",
+        "title": "Những ngôi sao xa xôi",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Các cô gái thanh niên xung phong"
+    },
+    {
+        "id": "136",
+        "author": "Nguyễn Quang Sáng",
+        "title": "Chiếc lược ngà",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tình cha con sâu nặng thời chiến"
+    },
+    {
+        "id": "137",
+        "author": "Kim Lân",
+        "title": "Vợ nhặt",
+        "category": "Truyện ngắn",
+        "period": "1945",
+        "language": "Quốc ngữ",
+        "note": "Hy vọng trong cái đói năm 45"
+    },
+    {
+        "id": "138",
+        "author": "Kim Lân",
+        "title": "Làng",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tình yêu làng gắn liền yêu nước"
+    },
+    {
+        "id": "139",
+        "author": "Bùi Hiển",
+        "title": "Chiều sương",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Văn chương đậm chất dân gian"
+    },
+    {
+        "id": "140",
+        "author": "Võ Quảng",
+        "title": "Quê nội",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tác phẩm tiêu biểu cho thiếu nhi miền Trung"
+    },
+    {
+        "id": "141",
+        "author": "Phạm Hổ",
+        "title": "Chú bò tìm bạn",
+        "category": "Thơ thiếu nhi",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Dành cho lứa tuổi mầm non"
+    },
+    {
+        "id": "142",
+        "author": "Đặng Thai Mai",
+        "title": "Văn học khái luận",
+        "category": "Phê bình",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Lý luận văn học thuở đầu"
+    },
+    {
+        "id": "143",
+        "author": "Phan Ngọc",
+        "title": "Cách giải thích văn học bằng ngôn ngữ học",
+        "category": "Nghiên cứu",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Phương pháp tiếp cận mới"
+    },
+    {
+        "id": "144",
+        "author": "Cao Huy Thuần",
+        "title": "Chuyện nọ chuyện kia",
+        "category": "Tản văn",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Trí tuệ và nhẹ nhàng"
+    },
+    {
+        "id": "145",
+        "author": "Nguyễn Nhật Ánh",
+        "title": "Cho tôi một vé đi tuổi thơ",
+        "category": "Truyện",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Gợi nhớ tuổi thơ trong sáng"
+    },
+    {
+        "id": "146",
+        "author": "Nguyễn Nhật Ánh",
+        "title": "Mắt biếc",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Bản tình ca buồn"
+    },
+    {
+        "id": "147",
+        "author": "Nguyễn Nhật Ánh",
+        "title": "Tôi thấy hoa vàng trên cỏ xanh",
+        "category": "Tiểu thuyết",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Vẻ đẹp tâm hồn trẻ thơ"
+    },
+    {
+        "id": "148",
+        "author": "Hồ Dzếnh",
+        "title": "Quê ngoại",
+        "category": "Tập thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Thơ của người gốc Hoa yêu Việt Nam"
+    },
+    {
+        "id": "149",
+        "author": "Hoàng Đạo",
+        "title": "Mười điều tâm niệm",
+        "category": "Tiểu luận",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Cải cách lối sống người Việt"
+    },
+    {
+        "id": "150",
+        "author": "Thanh Thảo",
+        "title": "Đàn ghi ta của Lor-ca",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Cảm hứng về cái chết của người nghệ sĩ"
+    },
+    {
+        "id": "151",
+        "author": "Hữu Thỉnh",
+        "title": "Sang thu",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Khoảnh khắc giao mùa tinh tế"
+    },
+    {
+        "id": "152",
+        "author": "Trần Dần",
+        "title": "Cổng tỉnh",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tìm tòi cách tân ngôn từ"
+    },
+    {
+        "id": "153",
+        "author": "Lê Đạt",
+        "title": "Bóng chữ",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Triết lý về chữ nghĩa"
+    },
+    {
+        "id": "154",
+        "author": "Đặng Đình Hưng",
+        "title": "Bến lạ",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Dòng thơ siêu thực Việt Nam"
+    },
+    {
+        "id": "155",
+        "author": "Dương Tường",
+        "title": "Đứng về phía bài thơ không hiểu được",
+        "category": "Tản văn",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Tư duy thẩm mỹ hiện đại"
+    },
+    {
+        "id": "156",
+        "author": "Trần Trọng Kim",
+        "title": "Việt Nam sử lược",
+        "category": "Lịch sử",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tóm lược lịch sử dễ đọc cho đại chúng"
+    },
+    {
+        "id": "157",
+        "author": "Phan Khôi",
+        "title": "Tình già",
+        "category": "Thơ mới",
+        "period": "1932",
+        "language": "Quốc ngữ",
+        "note": "Khởi đầu cho phong trào Thơ mới"
+    },
+    {
+        "id": "158",
+        "author": "Thế Lữ",
+        "title": "Vàng và máu",
+        "category": "Truyện trinh thám",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Truyện kinh dị thuở đầu"
+    },
+    {
+        "id": "159",
+        "author": "Tạ Duy Anh",
+        "title": "Bước qua lời nguyền",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Những đổi thay tâm thế xã hội"
+    },
+    {
+        "id": "160",
+        "author": "Phạm Thị Hoài",
+        "title": "Thiên sứ",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tiếng nói cá nhân nổi loạn"
+    },
+    {
+        "id": "161",
+        "author": "Đỗ Hoàng Diệu",
+        "title": "Bóng đè",
+        "category": "Tập truyện ngắn",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Viết về ẩn ức của phụ nữ"
+    },
+    {
+        "id": "162",
+        "author": "Băng Sơn",
+        "title": "Thú ăn chơi người Hà Nội",
+        "category": "Tản văn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Nét văn hóa thanh lịch thủ đô"
+    },
+    {
+        "id": "163",
+        "author": "Toan Ánh",
+        "title": "Nếp cũ",
+        "category": "Nghiên cứu văn hóa",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Ghi chép về phong tục tập quán"
+    },
+    {
+        "id": "164",
+        "author": "Sơn Nam",
+        "title": "Hương rừng Cà Mau",
+        "category": "Tập truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Vẻ đẹp vùng đất Mũi"
+    },
+    {
+        "id": "165",
+        "author": "Bình-nguyên Lộc",
+        "title": "Đò dọc",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Văn chương Nam bộ đặc sắc"
+    },
+    {
+        "id": "166",
+        "author": "Nhã Ca",
+        "title": "Giải khăn sô cho Huế",
+        "category": "Tùy bút",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Ký ức về Mậu Thân tại Huế"
+    },
+    {
+        "id": "167",
+        "author": "Dương Nghiễm Mậu",
+        "title": "Cũng xong một kiếp người",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Hiện sinh miền Nam"
+    },
+    {
+        "id": "168",
+        "author": "Trịnh Công Sơn",
+        "title": "Lời ca Trịnh Công Sơn",
+        "category": "Ca từ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Mang tính triết lý sâu sắc"
+    },
+    {
+        "id": "169",
+        "author": "Du Tử Lê",
+        "title": "Khúc thụy du",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Nét lãng mạn vô tận"
+    },
+    {
+        "id": "170",
+        "author": "Nguyễn Duy",
+        "title": "Ánh trăng",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Nhắc nhở đạo lý uống nước nhớ nguồn"
+    },
+    {
+        "id": "171",
+        "author": "Mạc Ngôn (Việt)",
+        "title": "Phẩm tiết",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Bản sắc văn chương Nguyễn Huy Thiệp"
+    },
+    {
+        "id": "172",
+        "author": "Thanh Tâm Tuyền",
+        "title": "Tôi không còn cô độc",
+        "category": "Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Phong cách thơ tự do miền Nam"
+    },
+    {
+        "id": "173",
+        "author": "Phạm Công Thiện",
+        "title": "Ý thức bùng vỡ",
+        "category": "Triết luận",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Tư duy bùng nổ của giới trí thức"
+    },
+    {
+        "id": "174",
+        "author": "Trần Thùy Mai",
+        "title": "Từ dụ thái hậu",
+        "category": "Tiểu thuyết lịch sử",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Vẻ đẹp sử kinh thành Huế"
+    },
+    {
+        "id": "175",
+        "author": "Uông Triều",
+        "title": "Sương mù tháng Giêng",
+        "category": "Tiểu thuyết",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Lịch sử qua lăng kính hư ảo"
+    },
+    {
+        "id": "176",
+        "author": "Nguyễn Bình Phương",
+        "title": "Trí nhớ người lạ",
+        "category": "Tiểu thuyết",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Cấu trúc văn chương hiện đại phức tạp"
+    },
+    {
+        "id": "177",
+        "author": "Phan Hồn Nhiên",
+        "title": "Ngựa thép",
+        "category": "Tiểu thuyết",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Hướng đi mới cho văn học trẻ"
+    },
+    {
+        "id": "178",
+        "author": "Hoài Nam",
+        "title": "Thơ miền Nam qua các thời kỳ",
+        "category": "Tuyển tập",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Dữ liệu văn học miền Nam"
+    },
+    {
+        "id": "179",
+        "author": "Tạ Tỵ",
+        "title": "Mười khuôn mặt văn nghệ",
+        "category": "Chân dung",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Các nghệ sĩ miền Nam"
+    },
+    {
+        "id": "180",
+        "author": "Hàn Mặc Tử",
+        "title": "Đau thương",
+        "category": "Tập thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Sự thống khổ dột cùng của tâm hồn"
+    },
+    {
+        "id": "181",
+        "author": "Chế Lan Viên",
+        "title": "Ánh sáng và phù sa",
+        "category": "Tập thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Trở lại với cuộc đời và cách mạng"
+    },
+    {
+        "id": "182",
+        "author": "Nguyễn Đình Thi",
+        "title": "Người Hà Nội",
+        "category": "Kịch/Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Khí phách thủ đô"
+    },
+    {
+        "id": "183",
+        "author": "Nguyễn Huy Tưởng",
+        "title": "Lá cờ thêu sáu chữ vàng",
+        "category": "Truyện lịch sử",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Anh hùng thiếu niên Trần Quốc Toản"
+    },
+    {
+        "id": "184",
+        "author": "Nam Cao",
+        "title": "Đôi mắt",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Cái nhìn của trí thức về kháng chiến"
+    },
+    {
+        "id": "185",
+        "author": "Nguyễn Khải",
+        "title": "Một người Hà Nội",
+        "category": "Truyện ngắn",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Cốt cách con người Tràng An"
+    },
+    {
+        "id": "186",
+        "author": "Chu Lai",
+        "title": "Ăn mày dĩ khứ",
+        "category": "Tiểu thuyết",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Những trăn trở thời hậu chiến"
+    },
+    {
+        "id": "187",
+        "author": "Hà Thủy Nguyên",
+        "title": "Điệu nhạc trần gian",
+        "category": "Tiểu thuyết",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Văn học mạng và kỳ ảo"
+    },
+    {
+        "id": "188",
+        "author": "Phan Việt",
+        "title": "Tiếng người",
+        "category": "Tiểu thuyết",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Sự cô độc trong thế giới phẳng"
+    },
+    {
+        "id": "189",
+        "author": "Đặng Thùy Trâm",
+        "title": "Nhật ký Đặng Thùy Trâm",
+        "category": "Nhật ký",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Lòng dũng cảm của nữ bác sĩ chiến trường"
+    },
+    {
+        "id": "190",
+        "author": "Chu Thẩm Ngạn",
+        "title": "Luân hồi",
+        "category": "Tiểu thuyết",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Vẻ đẹp tâm linh xứ Huế"
+    },
+    {
+        "id": "191",
+        "author": "Ngô Gia Văn Phái",
+        "title": "Ngô gia văn phái",
+        "category": "Tuyển tập",
+        "period": "TK XVIII",
+        "language": "Hán",
+        "note": "Dòng họ văn chương lớn"
+    },
+    {
+        "id": "192",
+        "author": "Nhiều tác giả",
+        "title": "Bách khoa toàn thư văn học Việt Nam",
+        "category": "Tra cứu",
+        "period": "TK XXI",
+        "language": "Quốc ngữ",
+        "note": "Dữ liệu tóm lược"
+    },
+    {
+        "id": "193",
+        "author": "Nguyễn Công Trứ",
+        "title": "Bài ca ngất ngưởng",
+        "category": "Hát nói",
+        "period": "TK XIX",
+        "language": "Nôm",
+        "note": "Cái ngông của nhà thực hành chính trị"
+    },
+    {
+        "id": "194",
+        "author": "Cao Bá Quát",
+        "title": "Bài ca ngắn đi trên bãi cát",
+        "category": "Thơ",
+        "period": "TK XIX",
+        "language": "Hán",
+        "note": "Sự bế tắc của kẻ sĩ thời Nguyễn"
+    },
+    {
+        "id": "195",
+        "author": "Khám Định Việt Sử",
+        "title": "Thông giám cương mục",
+        "category": "Sử học",
+        "period": "TK XIX",
+        "language": "Hán",
+        "note": "Sử liệu triều Nguyễn"
+    },
+    {
+        "id": "196",
+        "author": "Quốc sử quán",
+        "title": "Đại Nam nhất thống chí",
+        "category": "Địa chí",
+        "period": "TK XIX",
+        "language": "Hán",
+        "note": "Địa lý toàn vẹn đất nước thời Nguyễn"
+    },
+    {
+        "id": "197",
+        "author": "Trần Huy Liệu",
+        "title": "Tâm tư trong tù",
+        "category": "Hồi ký/Thơ",
+        "period": "TK XX",
+        "language": "Quốc ngữ",
+        "note": "Khí tiết cách mạng"
+    },
+    {
+        "id": "198",
+        "author": "Nguyễn Bỉnh Khiêm",
+        "title": "Bài thơ về thời thế",
+        "category": "Thơ Hán",
+        "period": "TK XVI",
+        "language": "Hán",
+        "note": "Thơ triết lý nổi tiếng"
+    },
+    {
+        "id": "199",
+        "author": "Phạm Công",
+        "title": "Phạm Công - Cúc Hoa",
+        "category": "Truyện Nôm",
+        "period": "TK XVIII",
+        "language": "Nôm",
+        "note": "Truyện Nôm phổ biến trong dân gian"
+    },
+    {
+        "id": "200",
+        "author": "Nguyễn Khuyến",
+        "title": "Thu điếu",
+        "category": "Thơ Nôm",
+        "period": "TK XIX",
+        "language": "Nôm",
+        "note": "Bài thơ nổi tiếng về mùa thu"
+    }
+]

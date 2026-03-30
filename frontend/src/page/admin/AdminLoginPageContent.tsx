@@ -21,16 +21,17 @@ const AdminLoginPageContent: React.FC = () => {
         try {
             const data = await loginAdmin(username, password);
             const user = data.user;
-            if (user.role !== 'admin' && user.role !== 'librarian') {
-                setError('Bạn không có quyền truy cập vào khu vực này!');
+            if (user.role !== 'admin') {
+                setError('Cổng này chỉ dành riêng cho Quản trị viên hệ thống!');
                 setLoading(false);
                 return;
             }
 
             localStorage.removeItem('token');
             localStorage.removeItem('user');
-            localStorage.setItem('adminToken', data.token);
-            localStorage.setItem('adminUser', JSON.stringify(user));
+            // Store admin credentials in sessionStorage for tab-isolation
+            sessionStorage.setItem('adminToken', data.token);
+            sessionStorage.setItem('adminUser', JSON.stringify(user));
             router.push('/admin');
         } catch (err: any) {
             setError(err?.response?.data?.message || 'Đã xảy ra lỗi. Vui lòng thử lại!');
@@ -130,9 +131,9 @@ const AdminLoginPageContent: React.FC = () => {
                                         <span className="text-xs font-bold block">Admin</span>
                                         <span className="text-[10px] text-gray-500 font-mono">admin / admin123</span>
                                     </button>
-                                    <button onClick={() => quickLogin('librarian', 'lib123')} className="p-3 rounded-xl border-2 border-dashed border-blue-100 hover:bg-blue-50 text-left">
+                                    <button onClick={() => quickLogin('quanly', 'quanly123')} className="p-3 rounded-xl border-2 border-dashed border-blue-100 hover:bg-blue-50 text-left">
                                         <span className="text-xs font-bold block">Thủ thư</span>
-                                        <span className="text-[10px] text-gray-500 font-mono">librarian / lib123</span>
+                                        <span className="text-[10px] text-gray-500 font-mono">quanly / quanly123</span>
                                     </button>
                                 </div>
                             </div>

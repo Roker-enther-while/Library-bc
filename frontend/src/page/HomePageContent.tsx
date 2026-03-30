@@ -179,16 +179,30 @@ const HomePageContent: React.FC = () => {
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-                        {categories_dynamic.map((cat, i) => {
+                        {categories_dynamic.slice(0, 6).map((cat, i) => {
                             const count = works_dynamic.filter(w => w.category === cat.id || (typeof w.category === 'object' && w.category?.id === cat.id)).length;
+
+                            // Vibrant gradients for fallback
+                            const vibrantGradients = [
+                                'from-blue-500 to-cyan-400',
+                                'from-purple-500 to-pink-500',
+                                'from-orange-400 to-red-500',
+                                'from-green-400 to-emerald-600',
+                                'from-indigo-500 to-purple-600',
+                                'from-rose-400 to-orange-300',
+                                'from-teal-400 to-blue-500',
+                                'from-amber-400 to-orange-500'
+                            ];
+                            const fallbackGradient = vibrantGradients[i % vibrantGradients.length];
+
                             return (
                                 <button
                                     key={cat.id || cat._id}
                                     onClick={() => router.push(`/the-loai?category=${cat.id || cat._id}`)}
                                     className={`group relative overflow-hidden rounded-2xl p-6 sm:p-8 text-left transition-all duration-300 hover:-translate-y-1 hover:shadow-xl animate-fadeInUp stagger-${Math.min(i + 1, 8)}`}
                                 >
-                                    <div className={`absolute inset-0 bg-gradient-to-br ${cat.gradient || 'from-gold-light to-gold'} opacity-90`} />
-                                    <div className="absolute inset-0 bg-gradient-to-br from-black/40 to-black/5" />
+                                    <div className={`absolute inset-0 bg-gradient-to-br ${cat.gradient || fallbackGradient} opacity-90`} />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-60" />
                                     <div className="relative">
                                         <div className="text-3xl sm:text-4xl mb-3">{cat.icon || '📚'}</div>
                                         <h3 className="font-display text-lg sm:text-xl font-bold text-white mb-1">{cat.name}</h3>
@@ -226,8 +240,8 @@ const HomePageContent: React.FC = () => {
                         </button>
                     </div>
 
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
-                        {authors_dynamic.slice(0, 10).map((author, i) => {
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6">
+                        {authors_dynamic.slice(0, 6).map((author, i) => {
                             const worksCount = author.worksCount || 0;
                             return (
                                 <button

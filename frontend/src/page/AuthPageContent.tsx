@@ -23,7 +23,12 @@ const AuthPageContent: React.FC = () => {
                 localStorage.removeItem('adminUser');
                 localStorage.setItem('token', data.token);
                 localStorage.setItem('user', JSON.stringify(data.user));
-                router.push('/');
+
+                if (data.user.role === 'librarian' || data.user.role === 'admin') {
+                    router.push('/admin');
+                } else {
+                    router.push('/');
+                }
             } else {
                 const data = await register(form);
                 localStorage.removeItem('adminToken');

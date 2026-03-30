@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getBooks, getAuthors, getFavorites, toggleFavorite as apiToggleFavorite } from '@/lib/apiClient';
+import { useToast } from '@/components/ui/Toast';
 import BookCard from '@/components/ui/BookCard';
 import ReservationModal from '@/components/ui/ReservationModal';
 import { useRouter } from 'next/navigation';
@@ -9,6 +10,7 @@ import { X } from 'lucide-react';
 
 const FavoritesPageContent: React.FC = () => {
     const router = useRouter();
+    const { showToast } = useToast();
     const [works_dynamic, setWorks] = useState<any[]>([]);
     const [authors_dynamic, setAuthors] = useState<any[]>([]);
     const [favorites, setFavorites] = useState<any[]>([]);
@@ -49,6 +51,7 @@ const FavoritesPageContent: React.FC = () => {
 
         try {
             const response = await apiToggleFavorite(workId);
+            const removedWork = favorites.find(f => (f._id || f.id) === workId);
             setFavorites(prev => prev.filter(f => (f._id || f.id) !== workId));
 
             const userStr = localStorage.getItem('user');
@@ -57,6 +60,11 @@ const FavoritesPageContent: React.FC = () => {
                 user.favorites = response.favorites;
                 localStorage.setItem('user', JSON.stringify(user));
             }
+
+            if (removedWork) {
+                showToast('success', `Đã xóa "${removedWork.title}" khỏi yêu thích`);
+            }
+
             window.dispatchEvent(new Event('storage'));
         } catch (error) {
             console.error("Error removing favorite:", error);

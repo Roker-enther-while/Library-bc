@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Book = require('../models/Book');
+const securityRepo = require('../repositories/SecurityRepository');
 
 const generateToken = (id, role) => {
     const expiresIn = (role === 'admin' || role === 'librarian') ? '4h' : '1d';
@@ -17,12 +18,13 @@ const transformUser = (user) => ({
     status: user.status,
     cardStatus: user.cardStatus,
     penalties: user.penalties || 0,
+    maxBorrowLimit: user.maxBorrowLimit || 5,
     favorites: user.favorites || [],
     createdAt: user.createdAt ? new Date(user.createdAt).toLocaleDateString('vi-VN') : '',
 });
 
-// POST /api/auth/login
-exports.login = async (req, res) => {
+// Shared Login Logic Helper
+const performLogin = async (req, res, isAdminOnly = false) => {
     try {
         const { username, password } = req.body;
         if (!username || !password)
@@ -31,6 +33,9 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ username });
         if (!user)
             return res.status(401).json({ message: 'Tên đăng nhập hoặc mật khẩu không đúng!' });
+
+        if (isAdminOnly && user.role !== 'admin' && user.role !== 'librarian')
+            return res.status(403).json({ message: 'Bạn không có quyền truy nhập vào trang quản trị!' });
 
         if (user.status === 'inactive')
             return res.status(401).json({ message: 'Tài khoản đã bị khóa. Vui lòng liên hệ admin!' });
@@ -46,6 +51,16 @@ exports.login = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+}
+
+// POST /api/auth/login
+exports.login = async (req, res) => {
+    await performLogin(req, res);
+};
+
+// POST /api/auth/admin/login
+exports.adminLogin = async (req, res) => {
+    await performLogin(req, res, true);
 };
 
 // POST /api/auth/register (public)
@@ -199,5 +214,26 @@ exports.getFavorites = async (req, res) => {
             message: error.message,
             stack: error.stack
         });
+    }
+};
+
+// GET /api/auth/me (authenticated)
+exports.getMe = async (req, res) => {
+    try {
+        const user = await User.findById(req.user._id);
+        if (!user) return res.status(404).json({ message: 'Không tìm thấy người dùng!' });
+        res.json(transformUser(user));
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+// GET /api/auth/security-logs (admin only)
+exports.getSecurityLogs = async (req, res) => {
+    try {
+        const logs = await securityRepo.findLatest(200);
+        res.json(logs);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
 };

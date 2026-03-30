@@ -7,16 +7,7 @@ import {
     Pencil, Trash2, ArrowUpRight
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import {
-    getBooks, getAccounts,
-    addBook, updateBook, deleteBook,
-    addAccount, updateAccount, deleteAccount, toggleAccountStatus,
-    getAuthors, addAuthor, updateAuthor, deleteAuthor,
-    getCategories, addCategory, updateCategory, deleteCategory,
-    getAllBorrowsLMS, returnBookLMS, createBorrowLink,
-    sendEmailReminders,
-    getAllReservations, confirmReservation, cancelReservation, markReservationPickedUp
-} from '@/lib/apiClient';
+import { useService } from '@/contexts/ServiceProvider';
 
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminHeader from '@/components/admin/AdminHeader';
@@ -33,8 +24,10 @@ import NewsTab from '@/components/admin/NewsTab';
 import ReservationsTab from '@/components/admin/ReservationsTab';
 import AccountsTab from '@/components/admin/AccountsTab';
 import { LiteraryWork, LibraryMember, BorrowRecord, AdminUser, NewsItem } from '@/types';
+import SecurityLogsTab from '@/components/admin/SecurityLogsTab';
+import { ShieldCheck } from 'lucide-react';
 
-type ActiveTab = 'dashboard' | 'books' | 'authors' | 'categories' | 'members' | 'borrows' | 'news' | 'reservations' | 'activities' | 'accounts';
+type ActiveTab = 'dashboard' | 'books' | 'authors' | 'categories' | 'members' | 'borrows' | 'news' | 'reservations' | 'activities' | 'accounts' | 'security';
 
 const tabToSlug: Record<string, string> = {
     dashboard: '',
@@ -56,6 +49,18 @@ const slugToTab: Record<string, ActiveTab> = Object.entries(tabToSlug).reduce((a
 
 const AdminPageContent = ({ slug = '' }: { slug?: string }) => {
     const router = useRouter();
+    const {
+        getBooks, getAccounts,
+        addBook, updateBook, deleteBook,
+        addAccount, updateAccount, deleteAccount, toggleAccountStatus,
+        getAuthors, addAuthor, updateAuthor, deleteAuthor,
+        getCategories, addCategory, updateCategory, deleteCategory,
+        getAllBorrowsLMS, returnBookLMS, createBorrowLink,
+        getAllReservations, confirmReservation, cancelReservation, markReservationPickedUp,
+        getSecurityLogs,
+        sendEmailReminders
+    } = useService();
+
     const [user, setUser] = useState<AdminUser | null>(null);
     const [activeTab, setActiveTabState] = useState<ActiveTab>('dashboard');
     const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -71,7 +76,7 @@ const AdminPageContent = ({ slug = '' }: { slug?: string }) => {
     const setActiveTab = useCallback((tabId: ActiveTab) => {
         setActiveTabState(tabId);
         const targetSlug = tabToSlug[tabId];
-        router.push(targetSlug ? `/admin/${targetSlug}` : '/admin');
+        router.push(targetSlug ? `/admin/${targetSlug}` : '/admin', { scroll: false });
     }, [router]);
 
     // Data State
@@ -83,6 +88,7 @@ const AdminPageContent = ({ slug = '' }: { slug?: string }) => {
     const [reservations, setReservations] = useState<any[]>([]);
     const [accounts, setAccounts] = useState<any[]>([]);
     const [news, setNews] = useState<NewsItem[]>([]);
+    const [securityLogs, setSecurityLogs] = useState<any[]>([]);
 
     // UI State
     const [loading, setLoading] = useState(true);
@@ -93,7 +99,7 @@ const AdminPageContent = ({ slug = '' }: { slug?: string }) => {
     // Form & Modal States
     const [showBookModal, setShowBookModal] = useState(false);
     const [editingBook, setEditingBook] = useState<LiteraryWork | null>(null);
-    const [bookForm, setBookForm] = useState({ title: '', authorId: '', authorName: '', category: '', categoryName: '', quantity: 1, available: 1, year: new Date().getFullYear(), summary: '' });
+    const [bookForm, setBookForm] = useState({ title: '', authorId: '', authorName: '', category: '', categoryName: '', quantity: 1, available: 1, year: new Date().getFullYear(), summary: '', shelfLocation: '' });
 
     const [showAuthorModal, setShowAuthorModal] = useState(false);
     const [editingAuthor, setEditingAuthor] = useState<any>(null);
@@ -165,23 +171,28 @@ const AdminPageContent = ({ slug = '' }: { slug?: string }) => {
                 cardStatus: (a.cardStatus || (a.status === 'active' ? 'active' : 'inactive')) as 'active' | 'inactive' | 'suspended',
                 totalBorrowed: userBorrows.length,
                 currentlyBorrowing: userBorrows.filter(b => b.status === 'borrowing' || b.status === 'overdue').length,
+                penalties: a.penalties || 0,
                 avatarColor: '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0'),
                 notes: notes[userId] || ''
             };
         });
     }, []);
 
-    const fetchData = useCallback(async () => {
-        setLoading(true);
+    const fetchData = useCallback(async (isInitial = false) => {
+        if (isInitial) setLoading(true);
         try {
-            const [booksData, borrowsData, accountsData, resData, authorsData, categoriesData] = await Promise.all([
+            console.log('[ADMIN] Fetching data...');
+            const [booksData, borrowsData, accountsData, resData, authorsData, categoriesData, securityLogsData] = await Promise.all([
                 getBooks(),
                 getAllBorrowsLMS(),
                 getAccounts(),
                 getAllReservations(reservationFilter || undefined),
                 getAuthors(),
-                getCategories()
+                getCategories(),
+                getSecurityLogs()
             ]);
+
+            console.log('[ADMIN] Data received:', { books: booksData?.length, borrows: borrowsData?.length, accounts: accountsData?.length });
 
             setBooks(booksData || []);
             setBorrows(borrowsData || []);
@@ -196,30 +207,44 @@ const AdminPageContent = ({ slug = '' }: { slug?: string }) => {
                 { id: '2', title: 'Cập nhật nội quy mượn sách mới', content: 'Từ ngày 01/03, độc giả có thể mượn tối đa 5 cuốn...', status: 'published', createdAt: new Date(Date.now() - 86400000).toISOString() }
             ]);
         } catch (error) {
+            console.error('[ADMIN] Fetch error:', error);
             addToast('Lỗi tải dữ liệu!', 'error');
         } finally {
-            setLoading(false);
+            if (isInitial) setLoading(false);
         }
-    }, [reservationFilter, memberNotes, mapMembersFromAccounts, addToast]);
+    }, [reservationFilter, memberNotes, mapMembersFromAccounts, addToast, getBooks, getAllBorrowsLMS, getAccounts, getAllReservations, getAuthors, getCategories, getSecurityLogs]);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('adminUser');
-        const token = localStorage.getItem('adminToken');
+        const storedUser = sessionStorage.getItem('adminUser') || localStorage.getItem('adminUser');
+        const token = sessionStorage.getItem('adminToken') || localStorage.getItem('adminToken');
+
         if (!storedUser || !token) {
             router.push('/admin-login');
             return;
         }
-        setUser(JSON.parse(storedUser));
-        fetchData();
-    }, [router, fetchData]);
+
+        const parsedUser = JSON.parse(storedUser);
+        if (parsedUser.role !== 'admin' && parsedUser.role !== 'librarian') {
+            addToast('Bạn không có quyền truy cập!', 'error');
+            router.push('/');
+            return;
+        }
+        setUser(parsedUser);
+
+        // Only trigger full loading screen if we have no data
+        const isInitial = books.length === 0;
+        fetchData(isInitial);
+    }, [router, fetchData, addToast]); // Removed dependency check for books.length to avoid loops
 
     const handleLogout = () => {
         localStorage.removeItem('adminToken');
         localStorage.removeItem('adminUser');
+        sessionStorage.removeItem('adminToken');
+        sessionStorage.removeItem('adminUser');
         router.push('/admin-login');
     };
 
-    const openAddBook = () => { setEditingBook(null); setBookForm({ title: '', authorId: '', authorName: '', category: '', categoryName: '', quantity: 1, available: 1, year: new Date().getFullYear(), summary: '' }); setShowBookModal(true); };
+    const openAddBook = () => { setEditingBook(null); setBookForm({ title: '', authorId: '', authorName: '', category: '', categoryName: '', quantity: 1, available: 1, year: new Date().getFullYear(), summary: '', shelfLocation: '' }); setShowBookModal(true); };
     const openEditBook = (b: LiteraryWork) => {
         setEditingBook(b);
         const catId = typeof b.category === 'string' ? b.category : (b.category as any)?.id || '';
@@ -231,8 +256,9 @@ const AdminPageContent = ({ slug = '' }: { slug?: string }) => {
             categoryName: b.categoryName || '',
             quantity: b.quantity || 0,
             available: b.available || 0,
-            year: (b.publicationYear || b.year || 0) as number,
-            summary: b.summary || ''
+            year: (b.publicationYear || 0) as number,
+            summary: b.summary || '',
+            shelfLocation: b.shelfLocation || ''
         });
         setShowBookModal(true);
     };
@@ -392,6 +418,7 @@ const AdminPageContent = ({ slug = '' }: { slug?: string }) => {
         { id: 'borrows' as const, label: 'Phiếu mượn', icon: <ClipboardList size={18} />, color: '#3A7CA5', always: true, badge: overdueBorrows },
         { id: 'reservations' as const, label: 'Đặt trước', icon: <BookMarked size={18} />, color: '#0ea5e9', always: true, badge: reservations.filter(r => r.status === 'pending').length },
         { id: 'news' as const, label: 'Tin tức', icon: <Newspaper size={18} />, color: '#D68910', always: true, badge: 0 },
+        { id: 'security' as const, label: 'An ninh', icon: <ShieldCheck size={18} />, color: '#DC2626', always: true, badge: securityLogs.filter(l => l.level === 'danger').length },
         { id: 'activities' as const, label: 'Hoạt động', icon: <Activity size={18} />, color: '#7C3AED', always: true, badge: 0 },
     ];
     const accountsNavItem = { id: 'accounts' as const, label: 'Tài khoản', icon: <UserCog size={18} />, color: '#1E1B4B', always: false, badge: 0 };
@@ -405,7 +432,9 @@ const AdminPageContent = ({ slug = '' }: { slug?: string }) => {
         </div>
     );
 
-    const fullNavItems = user.role === 'admin' ? [...navItems, accountsNavItem] : navItems;
+    const fullNavItems = user.role === 'admin'
+        ? [...navItems.filter(i => ['dashboard', 'news', 'security', 'activities'].includes(i.id)), accountsNavItem]
+        : navItems.filter(i => ['dashboard', 'books', 'authors', 'categories', 'members', 'borrows', 'reservations', 'news', 'activities'].includes(i.id));
 
     return (
         <div className="min-h-screen bg-gray-50/50 flex flex-col lg:flex-row font-sans text-gray-900">
@@ -451,6 +480,30 @@ const AdminPageContent = ({ slug = '' }: { slug?: string }) => {
                                     </div>
                                 ))}
                             </div>
+
+                            {user.role === 'admin' && (
+                                <div className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm flex items-center justify-between animate-fadeIn">
+                                    <div>
+                                        <h3 className="font-bold text-gray-900 text-sm">Báo cáo thống kê</h3>
+                                        <p className="text-gray-400 text-xs">Tải xuống dữ liệu mượn trả theo định kỳ (.csv)</p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <button
+                                            onClick={() => downloadReport('quarter')}
+                                            className="px-4 py-2 bg-indigo-50 text-indigo-700 rounded-xl text-xs font-bold hover:bg-indigo-100 transition-all border border-indigo-100 flex items-center gap-1.5"
+                                        >
+                                            <ArrowUpRight size={14} /> Báo cáo Quý
+                                        </button>
+                                        <button
+                                            onClick={() => downloadReport('year')}
+                                            className="px-4 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-black transition-all shadow-sm flex items-center gap-1.5"
+                                        >
+                                            <ArrowUpRight size={14} /> Báo cáo Năm
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+
                             <BookStatsCharts />
                         </div>
                     )}
@@ -550,10 +603,11 @@ const AdminPageContent = ({ slug = '' }: { slug?: string }) => {
                         </div>
                     )}
 
-                    {activeTab === 'members' && <MembersTab members={members} memberFilter={memberFilter} setMemberFilter={setMemberFilter} setMemberPage={setMemberPage} paginatedMembers={paginatedMembers} memberPage={memberPage} totalMemberPages={totalMemberPages} filteredMembers={filteredMembers} PER_PAGE={PER_PAGE} onView={setViewingMember} onEdit={openEditMember} onToggleStatus={async (m) => { try { await toggleAccountStatus(m.id); await fetchData(); addToast('Đã cập nhật trạng thái'); } catch { addToast('Lỗi!', 'error'); } }} onDelete={async (m) => { if (!confirm(`Xóa ${m.fullName}?`)) return; try { await deleteAccount(m.id); await fetchData(); addToast('Đã xóa'); } catch { addToast('Lỗi!', 'error'); } }} />}
-                    {activeTab === 'borrows' && <BorrowsTab borrows={borrows} borrowFilter={borrowFilter} setBorrowFilter={setBorrowFilter} setBorrowPage={setBorrowPage} paginatedBorrows={borrows.filter(b => borrowFilter === 'all' || b.status === borrowFilter).slice((borrowPage - 1) * PER_PAGE, borrowPage * PER_PAGE)} borrowPage={borrowPage} totalBorrowPages={Math.ceil(borrows.filter(b => borrowFilter === 'all' || b.status === borrowFilter).length / PER_PAGE)} filteredBorrows={borrows.filter(b => borrowFilter === 'all' || b.status === borrowFilter)} PER_PAGE={PER_PAGE} sendingReminders={sendingReminders} onSendReminders={handleSendReminders} openBorrowModal={() => setShowBorrowModal(true)} onReturn={async (b) => { if (!confirm(`Trả "${b.bookTitle}"?`)) return; try { await returnBookLMS(b._id || b.id); await fetchData(); addToast('Đã trả'); } catch { addToast('Lỗi!', 'error'); } }} />}
+                    {activeTab === 'members' && <MembersTab members={members} borrows={borrows} memberFilter={memberFilter} setMemberFilter={setMemberFilter} setMemberPage={setMemberPage} paginatedMembers={paginatedMembers} memberPage={memberPage} totalMemberPages={totalMemberPages} filteredMembers={filteredMembers} PER_PAGE={PER_PAGE} onView={setViewingMember} onEdit={openEditMember} onToggleStatus={async (m) => { try { await toggleAccountStatus(m.id); await fetchData(); addToast('Đã cập nhật trạng thái'); } catch { addToast('Lỗi!', 'error'); } }} onDelete={async (m) => { if (!confirm(`Xóa ${m.fullName}?`)) return; try { await deleteAccount(m.id); await fetchData(); addToast('Đã xóa'); } catch { addToast('Lỗi!', 'error'); } }} />}
+                    {activeTab === 'borrows' && <BorrowsTab borrows={borrows} borrowFilter={borrowFilter} setBorrowFilter={setBorrowFilter} setBorrowPage={setBorrowPage} paginatedBorrows={borrows.filter(b => borrowFilter === 'all' || b.status === borrowFilter).slice((borrowPage - 1) * PER_PAGE, borrowPage * PER_PAGE)} borrowPage={borrowPage} totalBorrowPages={Math.ceil(borrows.filter(b => borrowFilter === 'all' || b.status === borrowFilter).length / PER_PAGE)} filteredBorrows={borrows.filter(b => borrowFilter === 'all' || b.status === borrowFilter)} PER_PAGE={PER_PAGE} sendingReminders={sendingReminders} onSendReminders={handleSendReminders} openBorrowModal={() => setShowBorrowModal(true)} onReturn={async (b) => { if (!confirm(`Trả "${b.bookTitle}"?`)) return; try { await returnBookLMS(b._id || b.id); await fetchData(); addToast('Đã trả'); } catch { addToast('Lỗi!', 'error'); } }} onRenew={async (b) => { if (!confirm(`Gia hạn thêm 7 ngày cho "${b.bookTitle}"?`)) return; try { await useService().renewBook(b._id || b.id); addToast('Đã gia hạn thành công'); await fetchData(); } catch (err: any) { addToast(err.response?.data?.message || 'Lỗi khi gia hạn!', 'error'); } }} />}
                     {activeTab === 'news' && <NewsTab news={news} onAdd={() => { setEditingNews(null); setNewsForm({ title: '', content: '', status: 'draft' }); setShowNewsModal(true); }} onEdit={(n) => { setEditingNews(n); setNewsForm({ title: n.title, content: n.content, status: n.status }); setShowNewsModal(true); }} onDelete={(n) => { if (!confirm(`Xóa "${n.title}"?`)) return; setNews(prev => prev.filter(x => x.id !== n.id)); addToast('Đã xóa'); }} onToggleStatus={(n) => { const next = n.status === 'published' ? 'draft' : 'published'; setNews(prev => prev.map(x => x.id === n.id ? { ...x, status: next } : x)); addToast('Đã cập nhật'); }} />}
                     {activeTab === 'reservations' && <ReservationsTab reservations={reservations} reservationFilter={reservationFilter || ''} setReservationFilter={setReservationFilter} onConfirm={async (r) => { const promptVal = prompt('Hạn nhận (ngày):', '3'); const pickupDays = parseInt(promptVal || '3') || 3; try { await confirmReservation(r._id, pickupDays); addToast('Đã xác nhận'); await fetchData(); } catch { addToast('Lỗi!', 'error'); } }} onCancel={async (r) => { const reason = prompt('Lý do hủy:'); if (!reason) return; try { await cancelReservation(r._id, reason); addToast('Đã hủy'); await fetchData(); } catch { addToast('Lỗi!', 'error'); } }} onPickedUp={async (r) => { if (!confirm('Xác nhận nhận sách?')) return; try { await markReservationPickedUp(r._id); addToast('Đã nhận sách'); await fetchData(); } catch { addToast('Lỗi!', 'error'); } }} />}
+                    {activeTab === 'security' && <SecurityLogsTab logs={securityLogs} />}
 
                     {activeTab === 'activities' && (
                         <div className="space-y-6 animate-fadeIn">

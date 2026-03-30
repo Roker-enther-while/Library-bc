@@ -30,12 +30,13 @@ interface BorrowsTabProps {
     sendingReminders: boolean;
     onSendReminders: () => void;
     openBorrowModal: () => void;
+    onRenew: (b: BorrowRecord) => Promise<void>;
 }
 
 const BorrowsTab: React.FC<BorrowsTabProps> = ({
     borrows, borrowFilter, setBorrowFilter, setBorrowPage,
     paginatedBorrows, borrowPage, totalBorrowPages, filteredBorrows,
-    PER_PAGE, onReturn, sendingReminders, onSendReminders, openBorrowModal,
+    PER_PAGE, onReturn, sendingReminders, onSendReminders, openBorrowModal, onRenew
 }) => (
     <div className="space-y-4">
         <div className="flex flex-wrap items-center gap-2">
@@ -80,7 +81,18 @@ const BorrowsTab: React.FC<BorrowsTabProps> = ({
                                 <tr key={b._id || b.id} className={`hover:bg-gray-50/70 transition-colors ${isOverdue ? 'bg-red-50/30' : ''}`}>
                                     <td className="px-5 py-3.5">
                                         <p className="font-semibold text-gray-900 text-[13px] max-w-[180px] truncate">{b.bookTitle}</p>
-                                        {isOverdue && <span className="inline-flex items-center gap-1 text-[10px] text-red-500 font-semibold mt-0.5"><AlertTriangle size={9} />{Math.abs(dl)} ngày quá hạn</span>}
+                                        {isOverdue && (
+                                            <div className="flex flex-col gap-0.5 mt-0.5">
+                                                <span className="inline-flex items-center gap-1 text-[10px] text-red-500 font-semibold italic">
+                                                    <AlertTriangle size={9} /> {Math.abs(dl)} ngày quá hạn
+                                                </span>
+                                                {(b.fineAmount || 0) > 0 && (
+                                                    <span className="text-[11px] text-red-600 font-bold font-mono">
+                                                        Phạt: {(b.fineAmount || 0).toLocaleString()}đ
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
                                     </td>
                                     <td className="px-4 py-3.5">
                                         <p className="font-medium text-[13px] text-gray-800">{b.borrowerName}</p>
@@ -94,9 +106,18 @@ const BorrowsTab: React.FC<BorrowsTabProps> = ({
                                     <td className="px-4 py-3.5 text-center">
                                         {(b.status === 'borrowing' || b.status === 'overdue') && (
                                             <button onClick={() => onReturn(b)}
-                                                className="flex items-center gap-1.5 mx-auto px-3 py-1.5 rounded-xl text-[12px] font-bold text-white transition-all shadow-sm"
-                                                style={{ background: 'linear-gradient(135deg,#2D6A4F,#40916C)' }}>
-                                                <Check size={12} /> Xác nhận trả
+                                                className="flex items-center gap-1.5 mx-auto px-3 py-1.5 rounded-xl text-[12px] font-bold text-white transition-all shadow-sm hover:scale-105"
+                                                style={{ background: isOverdue ? 'linear-gradient(135deg,#A52422,#D64933)' : 'linear-gradient(135deg,#2D6A4F,#40916C)' }}>
+                                                {isOverdue ? <RefreshCw size={12} className="animate-spin-slow" /> : <Check size={12} />}
+                                                {isOverdue ? 'Thu phạt & Trả' : 'Xác nhận trả'}
+                                            </button>
+                                        )}
+                                        {(b.status === 'borrowing' || b.status === 'overdue') && (
+                                            <button onClick={() => onRenew(b)}
+                                                className="mt-2 flex items-center gap-1.5 mx-auto px-3 py-1.5 rounded-xl text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-100 transition-all hover:bg-blue-100"
+                                                title={`Gia hạn mượn (Đã gia hạn: ${b.renewCount || 0}/2)`}>
+                                                <RefreshCw size={11} />
+                                                Gia hạn ({b.renewCount || 0}/2)
                                             </button>
                                         )}
                                         {b.status === 'returned' && <span className="text-[11px] text-gray-400 italic">Đã trả {b.returnDate ? fmtDate(b.returnDate) : ''}</span>}

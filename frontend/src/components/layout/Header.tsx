@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { BookOpen, Search, Menu, X, Home, Library, Users, Grid3X3, Shield, Heart, Moon, Sun, User, LogOut, Clock, TrendingUp } from 'lucide-react';
+import { BookOpen, Search, Menu, X, Home, Library, Users, Grid3X3, Shield, Heart, Moon, Sun, User, LogOut, Clock, TrendingUp, Bell } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { searchBooks } from '@/lib/apiClient';
@@ -17,6 +17,7 @@ const Header: React.FC = () => {
     const [favoriteCount, setFavoriteCount] = useState(0);
     const [user, setUser] = useState<any>(null);
     const [isAdmin, setIsAdmin] = useState(false);
+    const [unreadCount, setUnreadCount] = useState(0);
 
     // Autocomplete
     const [suggestions, setSuggestions] = useState<any[]>([]);
@@ -35,6 +36,17 @@ const Header: React.FC = () => {
             setUser(null);
         }
         setIsAdmin(!!localStorage.getItem('adminToken'));
+
+        const fetchNotifications = async () => {
+            if (storedUser) {
+                try {
+                    const { getNotifications } = await import('@/lib/apiClient');
+                    const notifications = await getNotifications();
+                    setUnreadCount(notifications.filter((n: any) => !n.isRead).length);
+                } catch (e) { }
+            }
+        };
+        fetchNotifications();
     }, [pathname]);
 
     const handleLogout = () => {
@@ -264,6 +276,21 @@ const Header: React.FC = () => {
                                 >
                                     <Search size={20} />
                                 </button>
+                            )}
+
+                            {user && (
+                                <Link
+                                    href="/ho-so"
+                                    className="relative p-2.5 rounded-xl transition-all duration-300 text-ink-light dark:text-gray-300 hover:bg-parchment-dark dark:hover:bg-dark-surface"
+                                    title="Thông báo"
+                                >
+                                    <Bell size={20} />
+                                    {unreadCount > 0 && (
+                                        <span className="absolute top-2 right-2 w-4 h-4 bg-vermillion text-white text-[9px] font-bold rounded-full flex items-center justify-center">
+                                            {unreadCount > 9 ? '9+' : unreadCount}
+                                        </span>
+                                    )}
+                                </Link>
                             )}
 
                             {!isAdminPage && (

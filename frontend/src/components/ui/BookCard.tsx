@@ -4,22 +4,28 @@ import React, { useState, useEffect } from 'react';
 import { Clock, Eye, BookOpen, ChevronRight, Heart, MapPin } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { toggleFavorite as apiToggleFavorite } from '@/lib/apiClient';
+import { useToast } from '@/components/ui/Toast';
+
+import { LiteraryWork, BorrowRecord } from '@/types';
 
 interface BookCardProps {
-    work: any;
-    onRead: (work: any) => void;
-    onReserve?: (work: any) => void;
+    work: LiteraryWork;
+    onRead: (work: LiteraryWork) => void;
+    onReserve?: (work: LiteraryWork) => void;
+    onReturn?: (work: LiteraryWork) => void;
+    userStatus?: 'none' | 'borrowing' | 'reserved' | 'overdue';
     variant?: 'default' | 'featured' | 'compact';
     index?: number;
 }
 
-const BookCard: React.FC<BookCardProps> = ({ work, onRead, onReserve, variant = 'default', index = 0 }) => {
+const BookCard: React.FC<BookCardProps> = ({ work, onRead, onReserve, onReturn, userStatus = 'none', variant = 'default', index = 0 }) => {
     const router = useRouter();
+    const { showToast } = useToast();
     const [isFavorite, setIsFavorite] = useState(false);
     const [isAnimating, setIsAnimating] = useState(false);
     const workId = work.id || work._id || '';
-    const coverImage = work.coverImage || work.coverUrl || "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400";
-    const publicationYear = work.publicationYear ?? (typeof work.year === 'string' ? Number(work.year) : work.year);
+    const coverImage = work.coverImage || "https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400";
+    const publicationYear = work.publicationYear;
 
     useEffect(() => {
         const userStr = localStorage.getItem('user');
@@ -36,7 +42,7 @@ const BookCard: React.FC<BookCardProps> = ({ work, onRead, onReserve, variant = 
 
         const token = localStorage.getItem('token');
         if (!token) {
-            alert('Vui lòng đăng nhập để sử dụng tính năng yêu thích!');
+            showToast('warning', 'Vui lòng đăng nhập để sử dụng tính năng yêu thích!');
             router.push('/dang-nhap');
             return;
         }
@@ -44,7 +50,8 @@ const BookCard: React.FC<BookCardProps> = ({ work, onRead, onReserve, variant = 
         try {
             setIsAnimating(true);
             const response = await apiToggleFavorite(workId);
-            setIsFavorite(!isFavorite);
+            const newFavoriteStatus = !isFavorite;
+            setIsFavorite(newFavoriteStatus);
 
             // Cập nhật lại favorites trong user object ở localStorage để nhất quán
             const userStr = localStorage.getItem('user');
@@ -53,6 +60,8 @@ const BookCard: React.FC<BookCardProps> = ({ work, onRead, onReserve, variant = 
                 user.favorites = response.favorites;
                 localStorage.setItem('user', JSON.stringify(user));
             }
+
+            showToast('success', newFavoriteStatus ? `Đã thêm "${work.title}" vào yêu thích` : `Đã xóa "${work.title}" khỏi yêu thích`);
 
             setTimeout(() => setIsAnimating(false), 600);
             window.dispatchEvent(new Event('storage'));
@@ -114,11 +123,11 @@ const BookCard: React.FC<BookCardProps> = ({ work, onRead, onReserve, variant = 
                                 Vị trí: {work.shelfLocation}
                             </div>
                         )}
-                        {(work.available != null || work.availableCopies != null) && (
+                        {work.available != null && (
                             <div className="mb-3">
                                 {(() => {
-                                    const avail = work.available ?? work.availableCopies ?? 0;
-                                    const total = work.quantity ?? work.totalCopies;
+                                    const avail = work.available ?? 0;
+                                    const total = work.quantity;
                                     return avail > 0 ? (
                                         <span className="inline-flex items-center gap-1 text-[10px] font-sans font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
                                             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
@@ -143,7 +152,26 @@ const BookCard: React.FC<BookCardProps> = ({ work, onRead, onReserve, variant = 
                                 <span>{publicationYear || '—'}</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                {onReserve && (
+                                {userStatus === 'borrowing' && onReturn && (
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); onReturn(work); }}
+                                        className="flex items-center gap-1 text-xs font-sans font-semibold text-blue-600 hover:text-blue-700 transition-colors border border-blue-200 hover:border-blue-400 px-2.5 py-1 rounded-lg hover:bg-blue-50"
+                                    >
+                                        Trả sách
+                                    </button>
+                                )}
+                                {userStatus === 'overdue' && onReturn && (
+                                    <button
+                                        onClick={(e) => { e.stopPropagation(); onReturn(work); }}
+                                        className="flex flex-col items-end group/btn"
+                                    >
+                                        <div className="flex items-center gap-1 text-xs font-sans font-bold text-red-600 border border-red-200 bg-red-50 px-2.5 py-1 rounded-lg animate-pulse hover:bg-red-100 transition-all">
+                                            ⚠️ Trả sách & Phạt
+                                        </div>
+                                        <span className="text-[10px] text-red-500 font-bold mt-0.5">{(work.fineAmount || 0).toLocaleString()}đ</span>
+                                    </button>
+                                )}
+                                {onReserve && userStatus === 'none' && (work.available ?? 0) > 0 && (
                                     <button
                                         onClick={(e) => { e.stopPropagation(); onReserve(work); }}
                                         className="flex items-center gap-1 text-xs font-sans font-semibold text-emerald-600 hover:text-emerald-700 transition-colors border border-emerald-200 hover:border-emerald-400 px-2.5 py-1 rounded-lg hover:bg-emerald-50"
@@ -155,7 +183,7 @@ const BookCard: React.FC<BookCardProps> = ({ work, onRead, onReserve, variant = 
                                     onClick={() => onRead(work)}
                                     className="flex items-center gap-1 text-xs font-sans font-semibold text-vermillion hover:text-vermillion-dark transition-colors"
                                 >
-                                    Đọc ngay <ChevronRight size={14} />
+                                    {userStatus === 'borrowing' ? 'Đọc tiếp' : 'Đọc ngay'} <ChevronRight size={14} />
                                 </button>
                             </div>
                         </div>
@@ -215,12 +243,17 @@ const BookCard: React.FC<BookCardProps> = ({ work, onRead, onReserve, variant = 
                             ⭐ Nổi bật
                         </div>
                     )}
+                    {userStatus === 'overdue' && (
+                        <div className="absolute top-12 left-3 bg-red-600 text-white text-[10px] font-sans font-bold px-2.5 py-1 rounded-full uppercase tracking-wide shadow-lg flex items-center gap-1 animate-bounce">
+                            ⚠️ Trễ hạn: {(work.fineAmount || 0).toLocaleString()}đ
+                        </div>
+                    )}
                     <button
                         onClick={() => onRead(work)}
                         className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100"
                     >
                         <span className="px-4 py-2 bg-white rounded-full text-ink text-sm font-semibold flex items-center gap-2 shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform">
-                            <BookOpen size={16} /> Đọc ngay
+                            <BookOpen size={16} /> {userStatus === 'borrowing' ? 'Đọc tiếp' : 'Đọc ngay'}
                         </span>
                     </button>
                 </div>
@@ -235,11 +268,11 @@ const BookCard: React.FC<BookCardProps> = ({ work, onRead, onReserve, variant = 
                         {work.title}
                     </h3>
                     <p className="text-sm text-gold-dark mt-0.5">{work.authorName || work.author?.name}</p>
-                    {(work.available != null || work.availableCopies != null) && (
+                    {work.available != null && (
                         <div className="mt-1.5">
                             {(() => {
-                                const avail = work.available ?? work.availableCopies ?? 0;
-                                const total = work.quantity ?? work.totalCopies;
+                                const avail = work.available ?? 0;
+                                const total = work.quantity;
                                 return avail > 0 ? (
                                     <span className="inline-flex items-center gap-1 text-[10px] font-sans font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 border border-emerald-100">
                                         <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
@@ -252,12 +285,28 @@ const BookCard: React.FC<BookCardProps> = ({ work, onRead, onReserve, variant = 
                                     </span>
                                 );
                             })()}
-                            {onReserve && (
+                            {onReserve && userStatus === 'none' && (work.available ?? 0) > 0 && (
                                 <button
                                     onClick={(e) => { e.stopPropagation(); onReserve(work); }}
                                     className="w-full mt-3 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold text-emerald-700 border border-emerald-200 hover:bg-emerald-50 hover:border-emerald-400 transition-all font-sans"
                                 >
                                     📌 Đặt trước sách này
+                                </button>
+                            )}
+                            {userStatus === 'borrowing' && onReturn && (
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); onReturn(work); }}
+                                    className="w-full mt-3 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold text-blue-700 border border-blue-200 hover:bg-blue-50 hover:border-blue-400 transition-all font-sans"
+                                >
+                                    🔄 Trả sách này
+                                </button>
+                            )}
+                            {userStatus === 'overdue' && onReturn && (
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); onReturn(work); }}
+                                    className="w-full mt-3 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-bold text-red-700 border border-red-200 bg-red-50 hover:bg-red-100 transition-all font-sans animate-pulse"
+                                >
+                                    ⚠️ Trả sách & Nộp phạt
                                 </button>
                             )}
                         </div>

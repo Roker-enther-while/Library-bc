@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect, Suspense, useCallback, useRef } fr
 import { Search, X, BookOpen, SlidersHorizontal, TrendingUp, Clock } from 'lucide-react';
 import { getBooks, searchBooks, getCategories } from '@/lib/apiClient';
 import BookCard from '@/components/ui/BookCard';
+import { LiteraryWork, CategoryInfo } from '@/types';
 import ReservationModal from '@/components/ui/ReservationModal';
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -12,18 +13,22 @@ function LibraryContent() {
     const searchParams = useSearchParams();
     const initialSearchFromQuery = searchParams.get('q') || '';
 
-    const [works_dynamic, setWorks] = useState<any[]>([]);
-    const [categories_dynamic, setCategories] = useState<any[]>([]);
+    const [works_dynamic, setWorks] = useState<LiteraryWork[]>([]);
+    const [allWorksForCounting, setAllWorksForCounting] = useState<LiteraryWork[]>([]);
+    const [categories_dynamic, setCategories] = useState<CategoryInfo[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState(initialSearchFromQuery);
     const [selectedCategory, setSelectedCategory] = useState<string | 'all'>('all');
     const [sortBy, setSortBy] = useState<'title' | 'publicationYear' | 'views' | 'readTime'>('views');
     const [showFilters, setShowFilters] = useState(false);
     const [debouncedSearch, setDebouncedSearch] = useState('');
+    const [yearFilter, setYearFilter] = useState<{ min: number; max: number }>({ min: 1900, max: new Date().getFullYear() });
     const [currentPage, setCurrentPage] = useState(1);
     const BOOKS_PER_PAGE = 12;
     const [reservedBook, setReservedBook] = useState<any>(null);
     const [userFavorites, setUserFavorites] = useState<string[]>([]);
+    const [userBorrows, setUserBorrows] = useState<any[]>([]);
+
 
     // Autocomplete
     const [suggestions, setSuggestions] = useState<any[]>([]);
@@ -50,30 +55,39 @@ function LibraryContent() {
         };
         fetchCats();
 
-        const syncFavorites = () => {
+        const syncUserData = async () => {
             const userStr = localStorage.getItem('user');
             if (userStr) {
                 try {
                     const user = JSON.parse(userStr);
                     setUserFavorites(user.favorites || []);
+
+                    // Lấy thêm lịch sử mượn để xác định trạng thái các đối tượng Sách
+                    const { getUserHistory } = await import('@/lib/apiClient');
+                    const history = await getUserHistory(user.id || user._id);
+                    setUserBorrows(history || []);
                 } catch (e) { console.error(e); }
             }
         };
 
-        syncFavorites();
-        window.addEventListener('storage', syncFavorites);
-        return () => window.removeEventListener('storage', syncFavorites);
+        syncUserData();
+        window.addEventListener('storage', syncUserData);
+        return () => window.removeEventListener('storage', syncUserData);
+
     }, []);
 
     useEffect(() => {
         const fetchBooks = async () => {
             setLoading(true);
             try {
+                const fullData = await getBooks();
+                setAllWorksForCounting(fullData || []);
+
                 let data;
                 if (debouncedSearch) {
                     data = await searchBooks(debouncedSearch);
                 } else {
-                    data = await getBooks();
+                    data = fullData;
                 }
                 setWorks(data || []);
             } catch (error) {
@@ -83,6 +97,7 @@ function LibraryContent() {
             }
         };
         fetchBooks();
+        console.log('[LIBRARY] Library initialization complete.');
     }, [debouncedSearch]);
 
     const filtered = useMemo(() => {
@@ -95,6 +110,13 @@ function LibraryContent() {
                 return wCatId === selectedCategory || (selectedCatInfo && (wCatId === selectedCatInfo.id || wCatId === selectedCatInfo._id));
             });
         }
+
+        // Filter by Year
+        result = result.filter(w => {
+            const y = Number(w.publicationYear || 0);
+            if (!y) return true; // Keep if no year info
+            return y >= yearFilter.min && y <= yearFilter.max;
+        });
 
         result.sort((a, b) => {
             const idA = a._id || a.id;
@@ -120,7 +142,7 @@ function LibraryContent() {
         });
 
         return result;
-    }, [works_dynamic, selectedCategory, sortBy]);
+    }, [works_dynamic, selectedCategory, sortBy, userFavorites, yearFilter]);
 
     useEffect(() => {
         setCurrentPage(1);
@@ -160,6 +182,29 @@ function LibraryContent() {
         setSuggestions([]);
         setSearch('');
     };
+
+    const handleReturn = async (work: any) => {
+        if (!confirm(`Bạn muốn xác nhận trả cuốn sách "${work.title}"?`)) return;
+        try {
+            const borrow = userBorrows.find(b => (b.bookId === work.id || b.book?._id === work.id || b.book?._id === work._id) && b.status !== 'returned');
+            if (!borrow) return;
+
+            const { returnBookLMS } = await import('@/lib/apiClient');
+            await returnBookLMS(borrow._id || borrow.id);
+            alert('Đã gửi yêu cầu trả sách!');
+            // Refresh borrow list
+            const userStr = localStorage.getItem('user');
+            if (userStr) {
+                const user = JSON.parse(userStr);
+                const { getUserHistory } = await import('@/lib/apiClient');
+                const history = await getUserHistory(user.id || user._id);
+                setUserBorrows(history || []);
+            }
+        } catch (error: any) {
+            alert(error.response?.data?.message || 'Có lỗi xảy ra khi trả sách');
+        }
+    };
+
 
     const handleKeyDown = (e: React.KeyboardEvent) => {
         if (!suggestions.length) return;
@@ -282,141 +327,192 @@ function LibraryContent() {
                         <p className="font-sans text-vermillion font-semibold text-lg">Đang tải sách...</p>
                     </div>
                 ) : (
-                    <>
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-                            <div className="flex items-center gap-2 flex-wrap">
-                                <button
-                                    onClick={() => setSelectedCategory('all')}
-                                    className={`px-4 py-2 rounded-full text-xs font-sans font-medium transition-all ${selectedCategory === 'all'
-                                        ? 'bg-vermillion text-white shadow-md'
-                                        : 'bg-white dark:bg-dark-card text-ink-light dark:text-gray-300'
-                                        }`}
-                                >
-                                    Tất cả ({works_dynamic.length})
-                                </button>
-                                {categories_dynamic.map(cat => {
-                                    const count = works_dynamic.filter(w => {
-                                        const wCatId = typeof w.category === 'string' ? w.category : w.category?._id || w.category?.id;
-                                        return wCatId === cat.id || wCatId === cat._id;
-                                    }).length;
-                                    return (
+                    <div className="flex flex-col lg:flex-row gap-8">
+                        {/* Sidebar Filters */}
+                        <aside className="w-full lg:w-64 flex-shrink-0">
+                            <div className="sticky top-24 space-y-8">
+                                <div className="bg-white dark:bg-dark-card rounded-2xl p-4 shadow-sm border border-gray-100 dark:border-gray-800 transition-all">
+                                    <h3 className="font-display text-sm font-bold text-ink dark:text-parchment uppercase tracking-wider mb-5 flex items-center gap-2 px-1">
+                                        <SlidersHorizontal size={18} className="text-gold" />
+                                        Thể loại
+                                    </h3>
+
+                                    <div className="flex flex-col gap-2.5 max-h-[60vh] overflow-y-auto pr-1 custom-scrollbar">
+                                        {/* All Categories Button */}
                                         <button
-                                            key={cat._id || cat.id}
-                                            onClick={() => setSelectedCategory(cat._id || cat.id)}
-                                            className={`px-4 py-2 rounded-full text-xs font-sans font-medium transition-all ${selectedCategory === (cat._id || cat.id)
-                                                ? 'bg-vermillion text-white shadow-md'
-                                                : 'bg-white dark:bg-dark-card text-ink-light dark:text-gray-300'
+                                            onClick={() => setSelectedCategory('all')}
+                                            className={`relative text-left px-5 py-3.5 rounded-xl transition-all border flex items-center justify-between group ${selectedCategory === 'all'
+                                                ? 'bg-vermillion border-vermillion text-white shadow-lg shadow-vermillion/20 z-10'
+                                                : 'bg-parchment/30 dark:bg-dark-bg border-gray-50 dark:border-gray-800 text-ink-light dark:text-gray-400 hover:border-gold hover:text-vermillion hover:bg-white dark:hover:bg-dark-surface shadow-sm'
                                                 }`}
                                         >
-                                            {cat.icon} {cat.name} ({count})
+                                            <div className="flex items-center gap-3">
+                                                <SlidersHorizontal size={14} className={selectedCategory === 'all' ? 'text-white/70' : 'text-gold'} />
+                                                <span className={`text-xs font-sans font-bold leading-tight ${selectedCategory === 'all' ? 'text-white' : 'text-ink dark:text-parchment'}`}>
+                                                    Tất cả tác phẩm
+                                                </span>
+                                            </div>
+                                            <div className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${selectedCategory === 'all' ? 'bg-white/20 text-white' : 'bg-gray-100 dark:bg-gray-800 text-ink-light/50 group-hover:bg-vermillion/10'}`}>
+                                                {works_dynamic.length}
+                                            </div>
                                         </button>
-                                    );
-                                })}
-                            </div>
-                            <button
-                                onClick={() => setShowFilters(!showFilters)}
-                                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white dark:bg-dark-card text-ink-light dark:text-gray-300 text-xs font-sans font-medium shadow-sm"
-                            >
-                                <SlidersHorizontal size={14} />
-                                Sắp xếp
-                            </button>
-                        </div>
 
-                        {showFilters && (
-                            <div className="mb-8 p-4 bg-white dark:bg-dark-card rounded-xl shadow-sm animate-fadeIn">
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <span className="text-xs font-sans text-ink-light/60 dark:text-gray-400 mr-2">Sắp xếp theo:</span>
-                                    {[
-                                        { value: 'views', label: 'Phổ biến nhất' },
-                                        { value: 'title', label: 'Tên A-Z' },
-                                        { value: 'publicationYear', label: 'Mới nhất' },
-                                        { value: 'readTime', label: 'Ngắn nhất' },
-                                    ].map(opt => (
-                                        <button
-                                            key={opt.value}
-                                            onClick={() => setSortBy(opt.value as any)}
-                                            className={`px-3 py-1.5 rounded-lg text-xs font-sans font-medium transition-all ${sortBy === opt.value
-                                                ? 'bg-ink dark:bg-parchment text-white dark:text-ink'
-                                                : 'bg-parchment dark:bg-dark-surface text-ink-light dark:text-parchment'
-                                                }`}
-                                        >
-                                            {opt.label}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
+                                        {/* Individual Category Buttons */}
+                                        {categories_dynamic.map(cat => {
+                                            const categoryId = cat._id || cat.id;
+                                            const categoryName = cat.name?.toLowerCase().trim();
 
-                        <div className="mb-4">
-                            <p className="text-sm text-ink-light/50 dark:text-gray-500 font-sans">
-                                {filtered.length > 0
-                                    ? `Hiển thị ${filtered.length} tác phẩm`
-                                    : 'Không tìm thấy tác phẩm nào'}
-                            </p>
-                        </div>
+                                            const count = allWorksForCounting.filter(w => {
+                                                const wCatId = (typeof w.category === 'string' ? w.category : w.category?._id || w.category?.id || '').toString().toLowerCase().trim();
+                                                const wCatName = ((w as any).categoryName || '').toString().toLowerCase().trim();
 
-                        {filtered.length > 0 ? (
-                            <>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                                    {pagedBooks.map((work, i) => (
-                                        <BookCard
-                                            key={work._id || work.id}
-                                            work={work}
-                                            onRead={() => router.push(`/doc/${work._id || work.id}`)}
-                                            onReserve={(w: any) => setReservedBook(w)}
-                                            index={i}
-                                        />
-                                    ))}
-                                </div>
+                                                const targetId = categoryId.toString().toLowerCase().trim();
 
-                                {totalPages > 1 && (
-                                    <div className="mt-10 flex items-center justify-center gap-1.5">
-                                        <button
-                                            onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                                            disabled={currentPage === 1}
-                                            className="w-9 h-9 rounded-xl flex items-center justify-center text-ink-light dark:text-gray-300 disabled:opacity-30"
-                                        >
-                                            &#8249;
-                                        </button>
-                                        {getPageNumbers().map((p, idx) =>
-                                            p === '...' ? (
-                                                <span key={idx} className="w-9 h-9 flex items-center justify-center text-ink-light/40">...</span>
-                                            ) : (
+                                                return wCatId === targetId || (categoryName && wCatName === categoryName);
+                                            }).length;
+
+                                            if (count > 0) {
+                                                // console.log(`[DEBUG] Category ${cat.name} matches ${count} books.`);
+                                            }
+                                            const isActive = selectedCategory === categoryId;
+
+                                            return (
                                                 <button
-                                                    key={p}
-                                                    onClick={() => { setCurrentPage(Number(p)); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                                                    className={`w-9 h-9 rounded-xl flex items-center justify-center text-sm font-medium transition-all ${currentPage === p
-                                                        ? 'bg-vermillion text-white shadow-md'
-                                                        : 'text-ink-light dark:text-gray-300 hover:bg-white dark:hover:bg-dark-card'
+                                                    key={categoryId}
+                                                    onClick={() => setSelectedCategory(categoryId)}
+                                                    className={`group relative text-left px-5 py-3.5 rounded-xl transition-all border flex items-center justify-between gap-4 ${isActive
+                                                        ? 'bg-vermillion border-vermillion text-white shadow-lg shadow-vermillion/20 z-10'
+                                                        : 'bg-parchment/30 dark:bg-dark-bg border-gray-50 dark:border-gray-800 text-ink-light dark:text-gray-400 hover:border-gold hover:text-vermillion hover:bg-white dark:hover:bg-dark-surface shadow-sm'
                                                         }`}
                                                 >
-                                                    {p}
+                                                    <div className="flex items-center gap-3 min-w-0">
+                                                        <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${isActive ? 'bg-white' : 'bg-gold'}`} />
+                                                        <span className={`text-[13px] font-sans font-bold leading-snug truncate ${isActive ? 'text-white' : 'text-ink dark:text-parchment group-hover:text-vermillion'}`}>
+                                                            {cat.name}
+                                                        </span>
+                                                    </div>
+                                                    <div className={`flex-shrink-0 px-2 py-0.5 rounded-full text-[10px] font-bold ${isActive ? 'bg-white/20 text-white' : 'bg-gray-100 dark:bg-gray-800 text-ink-light/50 group-hover:bg-vermillion/10 group-hover:text-vermillion'}`}>
+                                                        {count}
+                                                    </div>
                                                 </button>
-                                            )
-                                        )}
-                                        <button
-                                            onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
-                                            disabled={currentPage === totalPages}
-                                            className="w-9 h-9 rounded-xl flex items-center justify-center text-ink-light dark:text-gray-300 disabled:opacity-30"
-                                        >
-                                            &#8250;
-                                        </button>
+                                            );
+                                        })}
                                     </div>
-                                )}
-                            </>
-                        ) : (
-                            <div className="text-center py-20">
-                                <div className="text-5xl mb-4">📚</div>
-                                <h3 className="font-display text-xl font-bold text-ink dark:text-parchment mb-2">Không tìm thấy</h3>
-                                <button
-                                    onClick={() => { setSearch(''); setSelectedCategory('all'); }}
-                                    className="px-6 py-2.5 bg-vermillion text-white rounded-xl text-sm font-medium hover:bg-vermillion-dark"
-                                >
-                                    Xóa bộ lọc
-                                </button>
+                                </div>
+
                             </div>
-                        )}
-                    </>
+                        </aside>
+
+                        {/* Main Content Area */}
+                        <main className="flex-1 min-w-0">
+                            <div className="bg-white dark:bg-dark-card rounded-2xl p-4 mb-8 shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div className="flex items-center gap-4">
+                                    <p className="text-sm font-sans text-ink-light dark:text-gray-400">
+                                        Tìm thấy <span className="font-bold text-ink dark:text-parchment">{filtered.length}</span> kết quả
+                                    </p>
+                                    <div className="h-4 w-px bg-gray-200 dark:bg-gray-700 hidden md:block" />
+                                    {selectedCategory !== 'all' && (
+                                        <button
+                                            onClick={() => setSelectedCategory('all')}
+                                            className="text-xs font-sans text-vermillion hover:underline flex items-center gap-1"
+                                        >
+                                            Xóa bộ lọc <X size={12} />
+                                        </button>
+                                    )}
+                                </div>
+
+                                <div className="flex items-center gap-3">
+                                    <span className="text-xs font-sans text-ink-light/60 dark:text-gray-500 whitespace-nowrap">Sắp xếp:</span>
+                                    <select
+                                        value={sortBy}
+                                        onChange={(e) => setSortBy(e.target.value as any)}
+                                        className="bg-parchment-dark dark:bg-dark-bg border-none rounded-xl px-4 py-2 text-xs font-sans font-semibold text-ink dark:text-parchment focus:ring-2 focus:ring-gold/30 outline-none cursor-pointer"
+                                    >
+                                        <option value="views">Phổ biến nhất</option>
+                                        <option value="title">Tên tác phẩm (A-Z)</option>
+                                        <option value="publicationYear">Năm sáng tác (Mới nhất)</option>
+                                        <option value="readTime">Thời gian đọc (Ngắn nhất)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            {filtered.length > 0 ? (
+                                <>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                                        {pagedBooks.map((work, i) => {
+                                            const workId = work._id || work.id;
+                                            const activeBorrow = userBorrows.find(b => (b.bookId === workId || b.book?._id === workId) && b.status !== 'returned');
+                                            let status: 'none' | 'borrowing' | 'overdue' = 'none';
+                                            if (activeBorrow) {
+                                                status = activeBorrow.status === 'overdue' ? 'overdue' : 'borrowing';
+                                            }
+
+                                            return (
+                                                <BookCard
+                                                    key={workId}
+                                                    work={work}
+                                                    onRead={() => router.push(`/doc/${workId}`)}
+                                                    onReserve={(w: any) => setReservedBook(w)}
+                                                    onReturn={handleReturn}
+                                                    userStatus={status}
+                                                    index={i}
+                                                />
+                                            );
+                                        })}
+                                    </div>
+
+                                    {totalPages > 1 && (
+                                        <div className="mt-12 flex items-center justify-center gap-2">
+                                            <button
+                                                onClick={() => { setCurrentPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
+                                                disabled={currentPage === 1}
+                                                className="w-10 h-10 rounded-xl bg-white dark:bg-dark-card border border-gray-100 dark:border-gray-800 flex items-center justify-center text-ink-light dark:text-gray-300 disabled:opacity-30 hover:border-gold transition-colors"
+                                            >
+                                                &#8249;
+                                            </button>
+                                            <div className="flex items-center gap-1.5">
+                                                {getPageNumbers().map((p, idx) =>
+                                                    p === '...' ? (
+                                                        <span key={`dots-${idx}`} className="w-10 h-10 flex items-center justify-center text-ink-light/40">...</span>
+                                                    ) : (
+                                                        <button
+                                                            key={`page-${p}`}
+                                                            onClick={() => { setCurrentPage(Number(p)); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
+                                                            className={`w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold transition-all ${currentPage === p
+                                                                ? 'bg-vermillion text-white shadow-lg shadow-vermillion/20'
+                                                                : 'bg-white dark:bg-dark-card border border-gray-100 dark:border-gray-800 text-ink-light dark:text-gray-300 hover:border-gold'
+                                                                }`}
+                                                        >
+                                                            {p}
+                                                        </button>
+                                                    )
+                                                )}
+                                            </div>
+                                            <button
+                                                onClick={() => { setCurrentPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 400, behavior: 'smooth' }); }}
+                                                disabled={currentPage === totalPages}
+                                                className="w-10 h-10 rounded-xl bg-white dark:bg-dark-card border border-gray-100 dark:border-gray-800 flex items-center justify-center text-ink-light dark:text-gray-300 disabled:opacity-30 hover:border-gold transition-colors"
+                                            >
+                                                &#8250;
+                                            </button>
+                                        </div>
+                                    )}
+                                </>
+                            ) : (
+                                <div className="text-center py-24 bg-white dark:bg-dark-card rounded-3xl border border-dashed border-gray-200 dark:border-gray-800">
+                                    <div className="text-6xl mb-6 grayscale opacity-50">📚</div>
+                                    <h3 className="font-display text-2xl font-bold text-ink dark:text-parchment mb-3">Không tìm thấy kết quả</h3>
+                                    <p className="text-sm text-ink-light/60 dark:text-gray-500 font-sans mb-8">Thử thay đổi bộ lọc hoặc từ khóa tìm kiếm của bạn</p>
+                                    <button
+                                        onClick={() => { setSearch(''); setSelectedCategory('all'); setYearFilter({ min: 1900, max: new Date().getFullYear() }); }}
+                                        className="px-8 py-3 bg-ink dark:bg-gold text-white dark:text-ink rounded-xl text-sm font-bold hover:opacity-90 transition-all shadow-lg"
+                                    >
+                                        Thiết lập lại tất cả
+                                    </button>
+                                </div>
+                            )}
+                        </main>
+                    </div>
                 )}
             </section>
 

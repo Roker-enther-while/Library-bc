@@ -25,6 +25,48 @@ const bookSchema = new mongoose.Schema({
     fullText: String
 }, { timestamps: true });
 
+// Pre-save hook để tự động tạo _id (slug) từ title nếu chưa có
+// Sử dụng function thường để bind 'this'
+bookSchema.pre('save', function () {
+    if (!this._id || this.isNew) {
+        // Slugify helper đơn giản trong Model (tương tự controller)
+        const slugify = (text) => {
+            if (!text) return '';
+            return text.toString().toLowerCase()
+                .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+                .replace(/[đĐ]/g, 'd')
+                .replace(/([^0-9a-z-\s])/g, '')
+                .replace(/\s+/g, '-')
+                .replace(/-+/g, '-')
+                .replace(/^-+/, '')
+                .replace(/-+$/, '');
+        };
+        const generatedId = slugify(this.title);
+        if (!this._id) this._id = generatedId;
+    }
+});
+
+// Instance methods - Rich Domain Logic
+bookSchema.methods.isAvailable = function () {
+    return this.available > 0;
+};
+
+bookSchema.methods.decrementAvailable = async function () {
+    if (this.available <= 0) throw new Error('Sách hiện đã hết trong kho!');
+    this.available -= 1;
+    return this.save();
+};
+
+bookSchema.methods.incrementAvailable = async function () {
+    if (this.available >= this.quantity) {
+        this.available = this.quantity; // Cap at quantity
+    } else {
+        this.available += 1;
+    }
+    return this.save();
+};
+
+
 // Đánh chỉ mục (Index) Full-Text Search cho các trường quan trọng
 bookSchema.index({
     title: 'text',

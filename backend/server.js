@@ -58,6 +58,10 @@ app.use(cors({
 
 app.use(express.json({ limit: '10mb' }));
 
+// Security Monitor (Threat Detection)
+const { threatDetector } = require('./middleware/securityMiddleware');
+app.use(threatDetector);
+
 // express-mongo-sanitize is incompatible with Express 5 (req.query is read-only).
 // Sanitize only req.body manually to prevent NoSQL injection.
 app.use((req, res, next) => {
@@ -101,6 +105,8 @@ app.use('/api/borrows', require('./routes/borrowRoutes'));
 app.use('/api/reservations', require('./routes/reservationRoutes'));
 app.use('/api/news', require('./routes/newsRoutes'));
 app.use('/api/ai', require('./ai/ai.routes'));
+app.use('/api/notifications', require('./routes/notificationRoutes'));
+app.use('/api/copies', require('./routes/copyRoutes'));
 
 
 app.get('/', (req, res) => {

@@ -11,41 +11,28 @@ export interface Author {
 
 export interface LiteraryWork {
     id: string;
-    _id?: string; // MongoDB ID
+    _id?: string;
     title: string;
-    author?: {
-        id: string;
-        name: string;
-        birthYear?: number;
-        deathYear?: number;
-        bio?: string;
-        era?: string;
-        avatar?: string;
-        region?: string;
-    };
+    slug?: string;
+    author?: Author;
     authorId?: string;
     authorName?: string;
-    category: CategoryInfo | { id: string; name?: string; description?: string; icon?: string; gradient?: string } | string;
+    category: CategoryInfo | string;
     categoryName?: string;
     publicationYear?: number;
-    year?: number | string;
     isbn?: string;
     publisher?: string;
-    totalCopies?: number;
-    availableCopies?: number;
+    quantity: number;
+    available: number; // Thống nhất dùng available thay vì availableCopies
     borrowCount?: number;
     shelfLocation?: string;
     coverImage?: string;
-    coverUrl?: string;
     coverColor?: string;
-    quantity?: number;
-    available?: number;
     readTime?: number;
     views?: number;
     isFeatured?: boolean;
     summary?: string;
-    significance?: string;
-    excerpt?: string;
+    fineAmount?: number;
     fullText?: string;
     createdAt?: string;
     updatedAt?: string;
@@ -55,6 +42,7 @@ export type Category = string;
 
 export interface CategoryInfo {
     id: Category;
+    _id?: string;
     name: string;
     description: string;
     icon: string;
@@ -82,21 +70,20 @@ export interface AdminUser {
 export interface BorrowRecord {
     id: string;
     _id?: string;
-    user?: string | { id?: string; _id?: string; fullName: string; studentId?: string; phone?: string };
-    book?: string | { id?: string; _id?: string; title: string };
+    user?: string | { _id?: string; fullName: string; studentId?: string; phone?: string };
+    book?: string | { _id?: string; title: string };
     userId?: string;
     bookId?: string;
     bookTitle?: string;
     borrowerName?: string;
     borrowerPhone?: string;
     borrowerStudentId?: string;
-    librarianId?: string;
-    librarianName?: string;
     borrowDate: string;
     dueDate: string;
     returnDate?: string;
-    status: 'borrowing' | 'borrowed' | 'returned' | 'overdue' | 'lost';
+    status: 'borrowing' | 'returned' | 'overdue' | 'lost';
     fineAmount?: number;
+    renewCount?: number;
     notes?: string;
 }
 
@@ -112,6 +99,7 @@ export interface LibraryMember {
     memberSince: string;
     totalBorrowed: number;
     currentlyBorrowing: number;
+    penalties: number;
     notes?: string;
     avatarColor?: string;
 }

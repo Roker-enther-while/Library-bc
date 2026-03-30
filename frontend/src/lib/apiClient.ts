@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { LiteraryWork, Author, BorrowRecord, CategoryInfo, NewsItem, AdminUser, LibraryMember } from '@/types';
 
 // NEXT_PUBLIC_API_URL=http://localhost:5000 (set in .env.local)
 // Khi build production, thay bằng URL backend thật
@@ -17,7 +18,8 @@ const api = axios.create({
 // Request interceptor for auth token
 api.interceptors.request.use((config) => {
     if (typeof window !== 'undefined') {
-        const token = localStorage.getItem('token') || localStorage.getItem('adminToken');
+        // Admin token in sessionStorage takes precedence for tab-isolation
+        const token = sessionStorage.getItem('adminToken') || localStorage.getItem('token') || localStorage.getItem('adminToken');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -35,6 +37,8 @@ api.interceptors.response.use(
                 localStorage.removeItem('adminToken');
                 localStorage.removeItem('user');
                 localStorage.removeItem('adminUser');
+                sessionStorage.removeItem('adminToken');
+                sessionStorage.removeItem('adminUser');
                 // Optional: window.location.href = '/dang-nhap'; 
             }
         }
@@ -45,14 +49,14 @@ api.interceptors.response.use(
 // Global In-Memory Cache for GET requests
 const apiCache: Record<string, any> = {};
 
-export const getBooks = async () => {
+export const getBooks = async (): Promise<LiteraryWork[]> => {
     if (apiCache['/books']) return apiCache['/books'];
     const { data } = await api.get('/books');
     apiCache['/books'] = data;
     return data;
 };
 
-export const searchBooks = async (query: string) => {
+export const searchBooks = async (query: string): Promise<LiteraryWork[]> => {
     const q = query.trim();
     const cacheKey = `/books/search?q=${q}`;
     if (apiCache[cacheKey]) return apiCache[cacheKey];
@@ -62,7 +66,7 @@ export const searchBooks = async (query: string) => {
     return data;
 };
 
-export const getBookById = async (id: string) => {
+export const getBookById = async (id: string): Promise<LiteraryWork> => {
     if (apiCache[`/books/${id}`]) return apiCache[`/books/${id}`];
     const { data } = await api.get(`/books/${id}`);
     apiCache[`/books/${id}`] = data;
@@ -84,7 +88,7 @@ export const loginAdmin = async (username: string, password: string) => {
     return data;
 };
 
-export const getAuthors = async () => {
+export const getAuthors = async (): Promise<Author[]> => {
     if (apiCache['/authors']) return apiCache['/authors'];
     const { data } = await api.get('/authors');
     apiCache['/authors'] = data;
@@ -127,6 +131,17 @@ export const getFavorites = async () => {
     const { data } = await api.get('/auth/favorites');
     return data;
 };
+
+export const getMe = async () => {
+    const { data } = await api.get('/auth/me');
+    return data;
+};
+
+export const getUserHistory = async (userId: string): Promise<BorrowRecord[]> => {
+    const { data } = await api.get(`/borrows/user/${userId}`);
+    return data;
+};
+
 
 export const chatAI = async (messages: any[], model = 'google/gemini-2.0-flash-001') => {
     const { data } = await api.post('/ai/chat', { messages, model });
@@ -182,6 +197,11 @@ export const createReservation = async (bookId: string, note = '') => {
     return data;
 };
 
+export const getMyReservations = async () => {
+    const { data } = await api.get('/reservations/my');
+    return data;
+};
+
 // Admin Services
 export const addBook = async (bookData: any) => {
     const { data } = await api.post('/books', bookData);
@@ -203,7 +223,30 @@ export const deleteBook = async (id: string) => {
     return data;
 };
 
-export const getAccounts = async () => {
+// Copy/BookItem Management
+export const getCopiesByBook = async (bookId: string) => {
+    const { data } = await api.get(`/copies/book/${bookId}`);
+    return data;
+};
+
+export const addCopy = async (copyData: any) => {
+    const { data } = await api.post('/copies', copyData);
+    delete apiCache['/books']; // To sync available count
+    return data;
+};
+
+export const deleteCopy = async (id: string) => {
+    const { data } = await api.delete(`/copies/${id}`);
+    delete apiCache['/books']; // To sync available count
+    return data;
+};
+
+export const getCopyByBarcode = async (barcode: string) => {
+    const { data } = await api.get(`/copies/barcode/${barcode}`);
+    return data;
+};
+
+export const getAccounts = async (): Promise<LibraryMember[]> => {
     const { data } = await api.get('/auth/accounts');
     return data;
 };
@@ -228,7 +271,7 @@ export const toggleAccountStatus = async (id: string) => {
     return data;
 };
 
-export const getAllBorrowsLMS = async () => {
+export const getAllBorrowsLMS = async (): Promise<BorrowRecord[]> => {
     const { data } = await api.get('/borrows');
     return data;
 };
@@ -240,6 +283,11 @@ export const returnBookLMS = async (id: string) => {
 
 export const createBorrowLink = async (userId: string, bookId: string, days: number) => {
     const { data } = await api.post('/borrows', { userId, bookId, days });
+    return data;
+};
+
+export const renewBook = async (recordId: string, days: number = 7) => {
+    const { data } = await api.patch(`/borrows/${recordId}/renew`, { days });
     return data;
 };
 
@@ -268,8 +316,34 @@ export const markReservationPickedUp = async (id: string) => {
     return data;
 };
 
+// Notifications
+export const getNotifications = async () => {
+    const { data } = await api.get('/notifications');
+    return data;
+};
+
+export const markNotificationRead = async (id: string) => {
+    const { data } = await api.patch(`/notifications/${id}/read`);
+    return data;
+};
+
+export const markAllNotificationsRead = async () => {
+    const { data } = await api.post('/notifications/read-all');
+    return data;
+};
+
 export const getBorrowStats = async () => {
     const { data } = await api.get('/borrows/stats');
+    return data;
+};
+
+export const getSecurityLogs = async () => {
+    const { data } = await api.get('/auth/security-logs');
+    return data;
+};
+
+export const reportThreat = async (reason: string, details: any) => {
+    const { data } = await api.post('/auth/report-threat', { reason, details });
     return data;
 };
 

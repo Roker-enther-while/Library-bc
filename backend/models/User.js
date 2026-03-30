@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema({
     role: { type: String, enum: ['admin', 'librarian', 'reader'], default: 'reader' },
     status: { type: String, enum: ['active', 'inactive'], default: 'active' },
     penalties: { type: Number, default: 0 },
+    maxBorrowLimit: { type: Number, default: 5 },
     favorites: [{ type: String }],
 }, { timestamps: true });
 

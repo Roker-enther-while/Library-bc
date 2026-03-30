@@ -8,6 +8,8 @@ import BottomNavigation from "@/components/layout/BottomNavigation";
 import AIChatbot from "@/components/layout/AIChatbot";
 import { ToastProvider } from "@/components/ui/Toast";
 import AppShell from "@/components/layout/AppShell";
+import { ServiceProvider } from "@/contexts/ServiceProvider";
+import SecurityMonitor from "@/components/layout/SecurityMonitor";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-display" });
@@ -27,9 +29,12 @@ export default function RootLayout({
     <html lang="vi" suppressHydrationWarning>
       <body className={`${inter.variable} ${playfair.variable} ${lora.variable} font-body antialiased`}>
         <ToastProvider>
-          <AppShell>
-            {children}
-          </AppShell>
+          <SecurityMonitor />
+          <ServiceProvider>
+            <AppShell>
+              {children}
+            </AppShell>
+          </ServiceProvider>
         </ToastProvider>
       </body>
     </html>

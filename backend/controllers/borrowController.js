@@ -1,7 +1,11 @@
+const BorrowServiceClass = require('../services/borrowService');
+const bookRepo = require('../repositories/BookRepository');
+const borrowRepo = require('../repositories/BorrowRepository');
 const BorrowRecord = require('../models/BorrowRecord');
 const Book = require('../models/Book');
-const User = require('../models/User');
-const Copy = require('../models/Copy');
+
+const borrowService = new BorrowServiceClass(bookRepo, borrowRepo);
+
 const { sendDueReminders } = require('../services/cronJobs');
 const mongoose = require('mongoose');
 
@@ -9,9 +13,17 @@ const mongoose = require('mongoose');
 const transformRecord = (record) => {
     if (!record) return null;
     const obj = record.toObject ? record.toObject() : record;
+
+    // Live fine calculation for unreturned records
+    let liveFine = obj.fineAmount || 0;
+    if (obj.status !== 'returned' && record.calculateFine) {
+        liveFine = record.calculateFine();
+    }
+
     return {
         ...obj,
         id: obj._id,
+        fineAmount: liveFine,
         bookTitle: obj.book?.title || obj.bookTitle || 'Không rõ',
         borrowerName: obj.user?.fullName || obj.borrowerName || 'Không rõ',
         borrowerPhone: obj.user?.phone || obj.borrowerPhone || '',
@@ -19,100 +31,48 @@ const transformRecord = (record) => {
     };
 };
 
-// Create Borrow Record (Circulation)
+// Create Borrow Record (Circulation) using Service
 exports.createBorrow = async (req, res) => {
     try {
         const { userId, bookId, days } = req.body;
+        const librarianId = req.user?.id || req.user?._id || null;
 
-        // Check user
-        const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ message: 'Không tìm thấy độc giả!' });
-        if (user.cardStatus === 'locked') return res.status(403).json({ message: 'Thẻ độc giả đang bị khóa!' });
-
-        // Check book availability
-        const book = await Book.findById(bookId);
-        if (!book || book.available <= 0) {
-            return res.status(400).json({ message: 'Sách hiện đã hết trong kho!' });
-        }
-
-        // Find an available copy
-        const copy = await Copy.findOne({ book: bookId, status: 'available' });
-
-        const dueDate = new Date();
-        dueDate.setDate(dueDate.getDate() + (days || 14));
-
-        const record = await BorrowRecord.create({
-            user: userId,
-            book: bookId,
-            librarianId: req.user?.id || null, // Capture librarian ID from request user
-            dueDate,
-            status: 'borrowing'
-        });
-
-        // Update book count
-        book.available -= 1;
-        await book.save();
-
-        // Update copy status if exists
-        if (copy) {
-            copy.status = 'borrowed';
-            await copy.save();
-        }
-
+        const record = await borrowService.createBorrow(userId, bookId, days, librarianId);
         res.status(201).json(transformRecord(record));
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
 
-// Return Book
+
+// Return Book using Service
 exports.returnBook = async (req, res) => {
     try {
         const { recordId } = req.params;
-        const record = await BorrowRecord.findById(recordId);
-        if (!record || record.status === 'returned') {
-            return res.status(400).json({ message: 'Phiếu mượn không hợp lệ hoặc đã trả!' });
-        }
-
-        record.returnDate = new Date();
-        record.status = 'returned';
-
-        // Calculate fines if overdue
-        if (record.returnDate > record.dueDate) {
-            const diffTime = Math.abs(record.returnDate - record.dueDate);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-            record.fineAmount = diffDays * 5000; // 5k per day
-        }
-
-        await record.save();
-
-        // Update book count
-        const book = await Book.findById(record.book);
-        if (book) {
-            book.available += 1;
-            await book.save();
-        }
-
-        // Update copy status
-        const copy = await Copy.findOne({ book: record.book, status: 'borrowed' });
-        if (copy) {
-            copy.status = 'available';
-            await copy.save();
-        }
-
+        const record = await borrowService.returnBook(recordId);
         res.json(transformRecord(record));
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(400).json({ message: error.message });
     }
 };
+
+exports.renewBook = async (req, res) => {
+    try {
+        const { recordId } = req.params;
+        const { days } = req.body;
+        const record = await borrowService.renewBook(recordId, days);
+        res.json(transformRecord(record));
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+};
+
 
 // Get User Borrow History
 exports.getUserHistory = async (req, res) => {
     try {
-        const history = await BorrowRecord.find({ user: req.params.userId })
-            .populate('book', 'title coverImage author category')
-            .sort({ createdAt: -1 });
-        res.json(history);
+        const history = await borrowService.getUserHistory(req.params.userId);
+        res.json(history.map(transformRecord));
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -121,10 +81,7 @@ exports.getUserHistory = async (req, res) => {
 // Get All Active Borrows (Admin)
 exports.getAllBorrows = async (req, res) => {
     try {
-        const borrows = await BorrowRecord.find({})
-            .populate('user', 'fullName studentId phone')
-            .populate('book', 'title author category')
-            .sort({ borrowDate: -1 });
+        const borrows = await borrowService.getAllBorrows();
         res.json(borrows.map(transformRecord));
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -137,6 +94,8 @@ exports.getBorrowStats = async (req, res) => {
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
         const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
 
+        console.log(`[BACKEND] Fetching stats for: ${startOfMonth.toISOString()} to ${endOfMonth.toISOString()}`);
+
         // 1. Top 10 sách mượn nhiều nhất tháng này
         const topBooksRaw = await BorrowRecord.aggregate([
             { $match: { borrowDate: { $gte: startOfMonth, $lte: endOfMonth } } },
@@ -145,6 +104,7 @@ exports.getBorrowStats = async (req, res) => {
             { $limit: 10 },
             { $lookup: { from: 'books', localField: '_id', foreignField: '_id', as: 'bookInfo' } }
         ]);
+        console.log(`[BACKEND] Top books found: ${topBooksRaw.length}`);
 
         const topBooks = topBooksRaw.map(item => ({
             bookTitle: item.bookInfo[0]?.title || 'Không rõ',
@@ -165,6 +125,7 @@ exports.getBorrowStats = async (req, res) => {
                 { $group: { _id: { $dateToString: { format: '%Y-%m-%d', date: '$returnDate' } }, returned: { $sum: 1 } } }
             ])
         ]);
+        console.log(`[BACKEND] Daily borrows/returns rows: ${dailyBorrowsRaw.length} / ${dailyReturnsRaw.length}`);
 
         const dateMap = {};
         dailyBorrowsRaw.forEach(d => dateMap[d._id] = { borrowed: d.borrowed, returned: 0 });
@@ -186,6 +147,7 @@ exports.getBorrowStats = async (req, res) => {
             { $unwind: '$bookInfo' },
             { $group: { _id: '$bookInfo.category', count: { $sum: 1 } } }
         ]);
+        console.log(`[BACKEND] Category stats found: ${categoryStatsRaw.length}`);
 
         const categoryDistribution = categoryStatsRaw.map(c => ({ category: c._id || 'Khác', count: c.count }));
 
@@ -196,8 +158,14 @@ exports.getBorrowStats = async (req, res) => {
             BorrowRecord.countDocuments({ status: 'overdue' })
         ]);
 
-        res.json({ topBooks, dailyBorrows, categoryDistribution, summary: { totalThisMonth, returnedThisMonth, overdueCount } });
+        res.json({
+            topBooks: topBooks || [],
+            dailyBorrows: dailyBorrows || [],
+            categoryDistribution: categoryDistribution || [],
+            summary: { totalThisMonth, returnedThisMonth, overdueCount }
+        });
     } catch (err) {
+        console.error('[BACKEND] Error in getBorrowStats:', err);
         res.status(500).json({ message: 'Lỗi khi lấy thống kê' });
     }
 };
@@ -218,5 +186,6 @@ module.exports = {
     getUserHistory: exports.getUserHistory,
     getAllBorrows: exports.getAllBorrows,
     triggerEmailReminders: exports.triggerEmailReminders,
-    getBorrowStats: exports.getBorrowStats
+    getBorrowStats: exports.getBorrowStats,
+    renewBook: exports.renewBook
 };
