@@ -374,7 +374,7 @@ export const BorrowModal: React.FC<any> = ({ borrowForm, setBorrowForm, books, m
                         <FormLabel required>Chọn tác phẩm</FormLabel>
                         <select value={borrowForm.bookId} onChange={e => setBorrowForm({ ...borrowForm, bookId: e.target.value })} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm bg-white focus:ring-2 focus:ring-blue-500/20 outline-none">
                             <option value="">-- Chọn sách --</option>
-                            {books.filter(b => (b.available ?? 0) > 0).map(b => (
+                            {books.filter((b: any) => (b.available ?? 0) > 0).map((b: any) => (
                                 <option key={b.id} value={b.id}>{b.title} (Còn {b.available ?? 0})</option>
                             ))}
                         </select>
@@ -385,7 +385,7 @@ export const BorrowModal: React.FC<any> = ({ borrowForm, setBorrowForm, books, m
                     <FormLabel required>Chọn độc giả</FormLabel>
                     <select value={borrowForm.memberId} onChange={e => setBorrowForm({ ...borrowForm, memberId: e.target.value })} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 text-sm bg-white focus:ring-2 focus:ring-blue-500/20 outline-none">
                         <option value="">-- Chọn độc giả --</option>
-                        {members.filter(m => m.cardStatus === 'active').map(m => (
+                        {members.filter((m: LibraryMember) => m.cardStatus === 'active').map((m: LibraryMember) => (
                             <option key={m.id} value={m.id}>{m.fullName} - {m.studentId}</option>
                         ))}
                     </select>
