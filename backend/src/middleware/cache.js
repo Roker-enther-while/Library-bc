@@ -13,6 +13,9 @@ const cache = new NodeCache({
  * Cấu trúc giống như cơ chế Redis get/set
  */
 const cacheMiddleware = (req, res, next) => {
+    // Tạm thời disable cache để debug
+    return next();
+    
     // Chỉ cache các request GET
     if (req.method !== 'GET') {
         return next();

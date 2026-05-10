@@ -80,18 +80,21 @@ function LibraryContent() {
         const fetchBooks = async () => {
             setLoading(true);
             try {
+                console.log('[DEBUG-FRONTEND] Fetching books...');
                 const fullData = await getBooks();
+                console.log(`[DEBUG-FRONTEND] Received ${fullData?.length} books from API.`);
                 setAllWorksForCounting(fullData || []);
 
                 let data;
                 if (debouncedSearch) {
                     data = await searchBooks(debouncedSearch);
+                    console.log(`[DEBUG-FRONTEND] Search results for "${debouncedSearch}": ${data?.length} books.`);
                 } else {
                     data = fullData;
                 }
                 setWorks(data || []);
             } catch (error) {
-                console.error("Error fetching library books:", error);
+                console.error("[DEBUG-FRONTEND] Error fetching library books:", error);
             } finally {
                 setLoading(false);
             }
@@ -438,6 +441,7 @@ function LibraryContent() {
 
                             {filtered.length > 0 ? (
                                 <>
+                                    {console.log('[RENDER-DEBUG] filtered:', filtered.length, 'paged:', pagedBooks.length, 'currentPage:', currentPage)}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                                         {pagedBooks.map((work, i) => {
                                             const workId = work._id || work.id;

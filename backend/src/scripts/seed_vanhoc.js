@@ -7,7 +7,8 @@ const Category = require('../models/Category');
 const Copy = require('../models/Copy');
 
 const DATA_PATH = path.join(__dirname, 'vanhoc_data.json');
-const MONGO_URI = 'mongodb+srv://huuphong:nhom1thuvien@cluster0.indiagt.mongodb.net/Library?appName=Cluster0';
+require('dotenv').config({ path: path.join(__dirname, '../../.env') });
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/library';
 
 const slugify = (text) => {
     if (!text) return '';

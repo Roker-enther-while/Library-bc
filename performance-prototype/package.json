@@ -1,0 +1,19 @@
+{
+  "name": "performance-validation-prototype",
+  "version": "1.0.0",
+  "description": "Prototype to validate architecture performance requirements",
+  "main": "index.js",
+  "scripts": {
+    "seed": "node scripts/seed.js",
+    "start-gateway": "node gateway/server.js",
+    "start-auth": "node auth-service/server.js",
+    "start-product": "node product-service/server.js",
+    "load-test": "node client/load-test.js"
+  },
+  "dependencies": {
+    "axios": "^1.6.7",
+    "express": "^4.18.2",
+    "mongoose": "^8.2.1",
+    "autocannon": "^7.15.0"
+  }
+}

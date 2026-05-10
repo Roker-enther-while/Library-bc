@@ -21,8 +21,12 @@ const transformBook = (book) => {
 const getBooks = async (req, res) => {
     try {
         const books = await Book.find({});
-        res.json(books.map(transformBook));
+        console.log(`[DEBUG] Found ${books.length} books in DB.`);
+        const transformed = books.map(transformBook);
+        console.log(`[DEBUG] Transformed ${transformed.length} books.`);
+        res.json(transformed);
     } catch (error) {
+        console.error('[DEBUG] Error in getBooks:', error);
         res.status(500).json({ message: error.message });
     }
 };
