@@ -20,9 +20,19 @@ const app = express();
 // Security Middlewares
 app.use(helmet());
 
-// Request logger
+// [PERFORMANCE & LOGGING] Request Middleware
 app.use((req, res, next) => {
+    const start = process.hrtime();
     console.log(`[REQUEST] ${req.method} ${req.url}`);
+    
+    const originalJson = res.json;
+    res.json = function(body) {
+        const diff = process.hrtime(start);
+        const timeInMs = (diff[0] * 1e3 + diff[1] * 1e-6).toFixed(3);
+        console.log(`[PERFORMANCE] ${req.method} ${req.url} handled in ${timeInMs}ms`);
+        res.setHeader('X-Response-Time', `${timeInMs}ms`);
+        return originalJson.apply(this, arguments);
+    };
     next();
 });
 
