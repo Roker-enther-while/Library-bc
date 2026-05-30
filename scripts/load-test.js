@@ -29,6 +29,7 @@ async function main() {
     // Test the real Library Backend
     await runTest('Library Books API - 10 Users', 'http://localhost:5000/api/books', 10, 5);
     await runTest('Library Books API - 100 Users', 'http://localhost:5000/api/books', 100, 5);
+    await runTest('STRESS TEST - 500 Users', 'http://localhost:5000/api/books', 500, 5);
 }
 
 main().catch(console.error);
